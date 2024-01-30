@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+
+  laravel:
+    build:
+      context: .
+      dockerfile: docker/dockerfile
+    container_name: laravel
+    restart: always
+    ports:
+      - 8010:80
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - phpmyadmin
+    networks:
+      - reseau_laravel
+
+  database:
+    image: mysql:8.2
+    container_name: mysql__laravel
+    volumes:
+      - volume_db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: magidba
+      MYSQL_DATABASE: laravel
+    ports:
+      - 8001:3306
+    networks:
+      - reseau_laravel
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin_laravel
+    ports:
+      - 8080:80
+    environment:
+      MYSQL_ROOT_PASSWORD: magidba
+      PMA_HOST: database
+    networks:
+      - reseau_laravel
+    depends_on:
+      - database
+  maildev:
+    image: maildev/maildev
+    container_name: mailing_laravel
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - "8081:80"
+    restart: always
+    depends_on:
+      - laravel
+    networks:
+      - reseau_laravel
+
+volumes:
+  volume_db:
+networks:
+  reseau_laravel:
