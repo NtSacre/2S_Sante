@@ -76,6 +76,7 @@ class HomeController extends Controller
 {
     $plannings = Planning::join('users', 'plannings.user_id', '=', 'users.id')
         ->select('plannings.*', 'users.nom as user_nom')
+        ->where('plannings.is_deleted', false)
         ->get();
 
     $groupedPlannings = $plannings->groupBy('user_nom');
@@ -85,7 +86,13 @@ class HomeController extends Controller
 
 public function detailMedecin()
 {
-    $medecin = User::where('role_id', 2)->with('infoSupMedecin')->get();
+    $medecin = User::where('role_id', 2)
+    ->where('is_blocked', false)
+    ->whereHas('infoSupMedecin', function ($query) {
+        $query->where('accepter', 1);
+    })
+    ->with('infoSupMedecin')
+    ->get();
 
     if($medecin->isNotEmpty()){
         

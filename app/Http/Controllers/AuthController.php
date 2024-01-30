@@ -27,6 +27,13 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'registerMedecin' , 'registerPatient']]);
     }
 
+
+    
+
+ 
+    
+
+
     /**
      * Get a JWT via given credentials.
      *
@@ -34,6 +41,29 @@ class AuthController extends Controller
      */
     public function login()
     {
+        $user = User::where('email',request('email'))->first();
+
+        if($user->role->nom == 'medecin'){
+
+        if($user->infoSupMedecin->accepter === 1 && $user->is_blocked !== 0){
+            return response()->json(['error' => 'Votre compte est bloqué'], 401);
+        }elseif ($user->infoSupMedecin->accepter === 0 && $user->is_blocked === 0){
+            return response()->json(['error' => 'validation compte en cours'], 401);
+
+        }else{
+
+            $credentials = request(['email', 'password']);
+
+            if (! $token = auth()->attempt($credentials)) {
+                return response()->json(['error' => 'non authorizé'], 401);
+            }
+    
+            return $this->respondWithToken($token);
+
+        }
+
+    }else{
+
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
@@ -41,8 +71,9 @@ class AuthController extends Controller
         }
 
         return $this->respondWithToken($token);
-    }
 
+    }
+}
     public function registerMedecin(StoreMedecinRequest $request){
         try {
             
@@ -193,11 +224,13 @@ class AuthController extends Controller
         public function accepterMedecin(string $id){
 
             try {
-                $medecin = User::findOrFail($id);
-                if($medecin){
-                    $medecin->accepter = true;
+                $infomedecin = InfoSupMedecin::where('user_id',$id)->first();
+               
+                if($infomedecin){
+                    $infomedecin->accepter = true;
 
-                    $medecin->save();
+                    if($infomedecin->save()){
+                        $medecin = User::where('id',$id)->first();
                         Mail::to($medecin->email)
                         ->send(new ValidationCompteMedecin($medecin));
 
@@ -205,6 +238,8 @@ class AuthController extends Controller
                             'message' => 'Vous avez accepter la demande de Dr. '.$medecin->nom,
                             
                         ], 200);
+                    }
+
                     
                 }
 
@@ -229,6 +264,8 @@ class AuthController extends Controller
         return response()->json(['message' => 'vous êtes déconnecté']);
     }
 
+
+    
 
     /**
      * Refresh a token.

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Planning;
 use App\Models\Consultation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -42,14 +43,14 @@ class ConsultationController extends Controller
     public function accepterConsultation(string $id)
     {
        try {
-       $consultation = Consultation::findOrFail($id);
+           $consultation = Consultation::findOrFail($id);
+           $this->authorize('accepterConsultation', $consultation);
 
        if($consultation){
         $consultation->status='accepter';
         if($consultation->update()){
-            dd($consultation->planning);
-
-            $patient=$consultation->user;
+            
+            $patient= User::findOrFail($consultation->user_id);
             
             $medecin= User::findOrFail($consultation->planning->user_id);
             $planning= $consultation->planning;
@@ -88,21 +89,32 @@ class ConsultationController extends Controller
      */
     public function store(StoreConsultationRequest $request)
     {
+        $this->authorize('create', Consultation::class);
         $donneeConsultationValider= $request->validated();
         $donneeConsultationValider['user_id']= Auth::user()->id;
-        
-        $consultation= new Consultation($donneeConsultationValider);
-        
-        if($consultation->save()){
-            return response()->json([
-                'message' => 'votre demande a bien été pris en compte',
-                'consultation' => $consultation
-            ],201);
+        $planning = Planning::where('id',$donneeConsultationValider['planning_id'] )->first();
+        if($planning->is_deleted === 0){
+
+            $consultation= new Consultation($donneeConsultationValider);
+
+            if($consultation->save()){
+                return response()->json([
+                    'message' => 'votre demande a bien été pris en compte',
+                    'consultation' => $consultation
+                ],201);
+            }else{
+                return response()->json([
+                    'message' => 'votre demande non pris en compte'
+                ],500);
+            }
         }else{
             return response()->json([
-                'message' => 'votre demande non pris en compte'
-            ],500);
+                'erreur' => 'article non trouvé'
+            ],404);
+
         }
+        
+
 
     }
 

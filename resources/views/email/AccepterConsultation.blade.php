@@ -8,7 +8,8 @@
 </head>
 <body>
 
-    <img src="https://i.ibb.co/2s5RXmM/Use-Case-Gestion-Rendez-Vous.png" alt="" style="width: 100px; height:100px; margin: 0 auto">
+    <img src="https://i.ibb.co/2s5RXmM/Use-Case-Gestion-Rendez-Vous.png"
+     alt="" style="width: 100px; height:100px; margin: 0 auto">
     
     <p><strong>Objet :</strong> S2S Santé - Acceptation de votre Consultation</p>
 

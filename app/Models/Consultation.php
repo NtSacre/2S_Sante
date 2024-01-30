@@ -10,7 +10,11 @@ class Consultation extends Model
 {
     use HasFactory;
 
-    public function patient(): BelongsTo
+    protected $guarded = [
+        'id'
+    ];
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

@@ -46,6 +46,7 @@ Route::middleware('medecin')->group(function(){
     Route::get('/accepter-consultation/{consultation}',
     [ConsultationController::class, 'accepterConsultation'])
     ->name('consultation.accepterConsultation');
+    Route::get('contacter-patient', [ConsultationController::class, 'contacterPatient'])->name('contacterPatient');
 });
 
 Route::middleware('patient')->group(function () {
