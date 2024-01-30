@@ -42,7 +42,12 @@ class AuthController extends Controller
     public function login()
     {
         $user = User::where('email',request('email'))->first();
-
+        //dd($user);
+        if($user == null){
+            return response()->json([
+             'message' => 'Utilisateur non trouvé'
+            ],404);
+        }
         if($user->role->nom == 'medecin'){
 
         if($user->infoSupMedecin->accepter === 1 && $user->is_blocked !== 0){
@@ -62,17 +67,17 @@ class AuthController extends Controller
 
         }
 
-    }else{
-
-        $credentials = request(['email', 'password']);
-
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'non authorizé'], 401);
-        }
-
-        return $this->respondWithToken($token);
+    }elseif($user->is_blocked !== 0){
+        return response()->json(['error' => 'Votre compte est bloqué'], 401);
 
     }
+    $credentials = request(['email', 'password']);
+
+    if (! $token = auth()->attempt($credentials)) {
+        return response()->json(['error' => 'non authorizé'], 401);
+    }
+
+    return $this->respondWithToken($token);
 }
     public function registerMedecin(StoreMedecinRequest $request){
         try {
