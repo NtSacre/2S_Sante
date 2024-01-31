@@ -42,7 +42,6 @@ class AuthController extends Controller
     public function login()
     {
         $user = User::where('email',request('email'))->first();
-        //dd($user);
         if($user == null){
             return response()->json([
              'message' => 'Utilisateur non trouvé'
@@ -63,7 +62,10 @@ class AuthController extends Controller
                 return response()->json(['error' => 'non authorizé'], 401);
             }
     
-            return $this->respondWithToken($token);
+            return $this->respondWithToken([
+                'user' => Auth::user(),
+                'token'=>$token
+            ]);
 
         }
 
@@ -77,9 +79,13 @@ class AuthController extends Controller
         return response()->json(['error' => 'non authorizé'], 401);
     }
 
-    return $this->respondWithToken($token);
+    return $this->respondWithToken([
+        'user' => Auth::user(),
+        'token'=>$token
+    ]);
 }
-    public function registerMedecin(StoreMedecinRequest $request){
+  
+public function registerMedecin(StoreMedecinRequest $request){
         try {
             
         $donneeMedecinValider=$request->validated();
