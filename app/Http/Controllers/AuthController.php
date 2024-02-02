@@ -218,7 +218,7 @@ public function registerMedecin(StoreMedecinRequest $request){
             $donneeMedecinValider['role_id']=2;
     $medecin = User::where('id', $id)->first();
     $infoSupMedecin =InfoSupMedecin::where('user_id',$id)->first();
-            $medecin->updated([
+            $medecin->update([
                 'nom' => $donneeMedecinValider['nom'],
                 'email' => $donneeMedecinValider['email'],
                 'telephone' => $donneeMedecinValider['telephone'],
@@ -229,7 +229,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
             ]);
             dd($medecin);
-             $infoSupMedecin=$infoSupMedecin->updated([
+             $infoSupMedecin=$infoSupMedecin->update([
                 'hopital_id' => $donneeMedecinValider['hopital_id'],
               'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
               'user_id' => $medecin->id,
@@ -248,7 +248,7 @@ public function registerMedecin(StoreMedecinRequest $request){
     $infoSupMedecin =InfoSupMedecin::where('user_id',$id)->first();
 
         $donneeMedecinValider['role_id']=2;
-        $medecin->updated([
+        $medecin->update([
             'nom' => $donneeMedecinValider['nom'],
             'email' => $donneeMedecinValider['email'],
             'telephone' => $donneeMedecinValider['telephone'],
@@ -258,7 +258,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
         ]);
      
-         $infoSupMedecin=$infoSupMedecin->updated([
+         $infoSupMedecin=$infoSupMedecin->update([
             'hopital_id' => $donneeMedecinValider['hopital_id'],
           'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
           'user_id' => $medecin->id,

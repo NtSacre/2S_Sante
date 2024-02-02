@@ -8,6 +8,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\ResetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,3 +77,10 @@ Route::prefix('/home')->name('home.')->group(function(){
   
   
   });
+
+  Route::post('motpasseoublie', [ResetPasswordController::class, 'soumettreMotpassOublie'])
+    ->name('motpasse.oublie.post');
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetPasswordForm'])
+    ->name('reset.password.get');
+Route::post('reset-password', [ResetPasswordController::class, 'submitResetPasswordForm'])
+    ->name('reset.password.post');

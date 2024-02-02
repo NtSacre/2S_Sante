@@ -17,7 +17,7 @@ class ArticleController extends Controller
     public function index()
     {
         $article = Article::where('user_id', Auth::user()->id)
-        ->where('is_deleted', false)->paginate(5);
+        ->where('is_deleted', false);
     if ($article) {
         return response()->json([
             'Articles' => $article
