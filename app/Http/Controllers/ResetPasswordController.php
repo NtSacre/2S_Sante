@@ -94,7 +94,7 @@ class ResetPasswordController extends Controller
     'password' => 'required|string|min:8|confirmed',
     'password_confirmation' => 'required|same:password',
 ]);
-
+    dd($request->token);
         $updatePassword = DB::table('password_reset_tokens')
             ->where([
 
@@ -102,6 +102,7 @@ class ResetPasswordController extends Controller
             ])
             ->first();
 
+dd($updatePassword);
         if (!$updatePassword) {
            
             return response()->json(['error' => 'Ressouces introuvables'], 404);
