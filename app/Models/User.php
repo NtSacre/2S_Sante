@@ -102,7 +102,7 @@ class User extends Authenticatable  implements JWTSubject
           /**
      * Get the planning for the medecin.
      */
-    public function Planning(): HasMany
+    public function planning(): HasMany
     {
         return $this->HasMany(Planning::class);
     }

@@ -16,12 +16,7 @@ class AuthentificationTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_example(): void
-    {
-        $response = $this->get('/');
 
-        $response->assertStatus(200);
-    }
 
     public function testRegisterPatientUnsuccessfully()
     {
@@ -30,6 +25,7 @@ class AuthentificationTest extends TestCase
             'nom' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password123',
+            'password_confirmation' =>'password123',
             'telephone' => $this->faker->phoneNumber,
             'genre' => 'homme',
             'role_id' => 3,
@@ -40,7 +36,7 @@ class AuthentificationTest extends TestCase
 
         $response = $this->postJson('/api/register-patient', $data);
 
-        // Vérifier que la réponse est correcte avec le code HTTP 201
+        // Vérifier que la réponse est correcte avec le code HTTP 422
         $response->assertStatus(422);
 
 
@@ -54,7 +50,8 @@ class AuthentificationTest extends TestCase
             'nom' => 'Momodou Sail',
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password123',
-            'telephone' => '778524565',
+            'password_confirmation' =>'password123',
+            'telephone' => '770000001',
             'genre' => 'homme',
             'role_id' => 3,
             'ville_id' => 1,
@@ -79,10 +76,11 @@ class AuthentificationTest extends TestCase
         Storage::fake('public');
 
         $data = [
-            'nom' => $this->faker->name,
+            'nom' => 'hermann du Con',
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password123',
-            'telephone' => '778527473',
+            'password_confirmation' =>'password123',
+            'telephone' => '770000011',
             'genre' => 'homme',
             'image' => UploadedFile::fake()->image('article.jpg'),
             'role_id' => 2,
@@ -112,9 +110,10 @@ class AuthentificationTest extends TestCase
         Storage::fake('public');
 
         $data = [
-            'nom' => $this->faker->name,
+            'nom' => 'yo gou',
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password123',
+            'password_confirmation' =>'password123',
             'telephone' => $this->faker->phoneNumber,
             'genre' => 'homme',
             'image' => UploadedFile::fake()->image('article.jpg'),
@@ -139,7 +138,7 @@ class AuthentificationTest extends TestCase
             'nom'=> $this->faker->name,
             'email' => 'text@example.com',
             'password' => bcrypt('password123'),
-            'telephone'=>'779517562',
+            'telephone'=>'770000111',
             'genre' => 'homme',
             'role_id' => 2,
             'ville_id' => 1,
@@ -179,7 +178,7 @@ class AuthentificationTest extends TestCase
             'nom'=> $this->faker->name,
             'email' => 'tagee@example.com',
             'password' => bcrypt('password123'),
-            'telephone'=>'779812582',
+            'telephone'=>'770001111',
             'genre' => 'homme',
             'role_id' => 2,
             'ville_id' => 1,
@@ -214,7 +213,7 @@ class AuthentificationTest extends TestCase
             'nom'=> $this->faker->name,
             'email' => 'tagu@example.com',
             'password' => bcrypt('password123'),
-            'telephone'=>'779612502',
+            'telephone'=>'770011111',
             'genre' => 'homme',
             'role_id' => 3,
             'ville_id' => 1,
@@ -250,7 +249,7 @@ class AuthentificationTest extends TestCase
         'nom'=> $this->faker->name,
         'email' => 'tuty@example.com',
         'password' => bcrypt('password123'),
-        'telephone'=>'774372512',
+        'telephone'=>'770111111',
         'genre' => 'homme',
         'role_id' => 3,
         'ville_id' => 1,
@@ -267,5 +266,52 @@ class AuthentificationTest extends TestCase
     $this->assertGuest();
 }
 
+public function testBloquerUserSuccessfully()
+{
+    // Créer un administrateur de test
+    $admin = User::factory()->create([
+        'nom'=> $this->faker->name,
+        'email' => 'abdxw@example.com',
+        'password' => bcrypt('password123'),
+        'telephone'=>'771111111',
+        'genre' => 'homme',
+        'role_id' => 1,
+        'ville_id' => 1,
+        'is_blocked' => 0,
+    ]);
+
+    // Connecter l'administrateur
+    
+
+    $token = JWTAuth::fromUser($admin);
+    $this->withHeader('Authorization', 'Bearer' . $token)
+                     ->post('/api/login');
+
+    // Créer un utilisateur de test
+    $user = User::factory()->create([
+        'nom'=> $this->faker->name,
+        'email' => 'jea@example.com',
+        'password' => bcrypt('password123'),
+        'telephone'=>'771111112',
+        'genre' => 'homme',
+        'role_id' => 3,
+        'ville_id' => 1,
+        'is_blocked' => 0,
+    ]);
+
+    // Envoyer une requête pour bloquer l'utilisateur
+    $response = $this->postJson('/api/bloquer-user/' . $user->id);
+
+    // Vérifier que la réponse est correcte avec le message attendu
+    $response->assertStatus(200)
+        ->assertJson([
+            'message' => 'utilisateur bloqué avec succès',
+        ]);
+
+    // Relire l'utilisateur depuis la base de données pour s'assurer qu'il est réellement bloqué
+    $user = User::findOrFail($user->id);
+   
+    $this->assertEquals(1, $user->is_blocked);
+}
 
 }

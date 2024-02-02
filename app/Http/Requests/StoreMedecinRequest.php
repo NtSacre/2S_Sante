@@ -26,15 +26,14 @@ class StoreMedecinRequest extends FormRequest
         return [
             'nom' => ['required', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required','min:8'],
+            'password' => ['required', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required'],
             'genre' => ['required'],
-            'telephone' => ['required','regex:/^(70|75|76|77|78)[0-9]{7}$/'],
-            
+            'telephone' => ['required', 'regex:/^(70|75|76|77|78)[0-9]{7}$/'],
             'image' => ['image', 'mimes:png,jpeg,jpg'],
-
-            'ville_id' => ['required', 'Integer','exists:villes,id' ],
-            'secteur_activite_id' => ['required', 'Integer', 'exists:secteur_activites,id'],
-            'hopital_id' => ['required', 'Integer', 'exists:hopitals,id']
+            'ville_id' => ['required', 'integer', 'exists:villes,id'],
+            'secteur_activite_id' => ['required', 'integer', 'exists:secteur_activites,id'],
+            'hopital_id' => ['required', 'integer', 'exists:hopitals,id'],
             
         ];
     }
@@ -49,6 +48,11 @@ class StoreMedecinRequest extends FormRequest
             "email.email" => 'L\'email incorrecte',
 
             "password.required" => 'Le mot de passe doit avoir (au moins 8 caractères)',
+            "password.required" => 'Le mot de passe doit avoir (au moins 8 caractères)',
+            "password.confirmed" => 'Les mots de passe ne sont pas conforment',
+
+
+            "password_confirmation.required" => ' le champ confirmation mot de passe est requis',
             "image.mimes" => 'Format d\'image incorrecte',
             "genre.required" => 'Le genre est requis',
             "hopital_id.required" => 'L\'hopital est requise',

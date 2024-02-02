@@ -17,7 +17,7 @@ class ArticleController extends Controller
     public function index()
     {
         $article = Article::where('user_id', Auth::user()->id)
-        ->where('is_deleted', false)->paginate(5);
+        ->where('is_deleted', false);
     if ($article) {
         return response()->json([
             'Articles' => $article
@@ -30,13 +30,7 @@ class ArticleController extends Controller
     }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -104,13 +98,7 @@ class ArticleController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Article $article)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.

@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RoleSeeder extends Seeder
 {
@@ -12,7 +13,11 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Role::factory(1)->create();
+                Role::factory()->create();
+
+                Role::factory()->medecin()->create();
+        
+                Role::factory()->patient()->create();
 
     }
 }

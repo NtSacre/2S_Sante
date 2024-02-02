@@ -8,59 +8,145 @@ use App\Models\Role;
 
 class RoleController extends Controller
 {
-    /**
+       /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return response()->json([
+            
+            'Roles'=> Role::all(),
+        ]);
+    
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreRoleRequest $request)
     {
-        //
+        
+     try {
+        $infoRoleValide=$request->validated();
+        $role= Role::create($infoRoleValide);
+        if($role){
+            return response()->json([
+               
+                'message'=> 'Role enregistré avec succè',
+                'role'=>$role
+            ],201);
+        }else{
+            return response()->json([
+                
+                'message'=> 'Role non enregistré',
+            ],500);
+        }
+     } catch (\Throwable $th) {
+        return response()->json([
+                
+            'erreur'=> $th->getMessage(),
+        ]);
+     }
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(string $id)
     {
-        //
+       
+       
+       try {
+        $role = Role::findOrFail($id);
+        if($role->exists()){
+            return response()->json([
+               
+                'role'=> $role,
+            ], 200);
+        }else{
+            return response()->json([
+                
+                'message'=> 'role non trouvée',
+            ], 500);
+        }
+       } catch (\Throwable $th) {
+        return response()->json([
+           
+            'erreur'=> $th->getMessage(),
+        ]);
+       }
+       
+       
+       
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Role $role)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(UpdateRoleRequest $request, string $id)
     {
-        //
+
+        try {
+$role = Role::findOrFail($id);
+            if($role){
+                $infoRoleValide=$request->validated();
+           
+            if($role->update($infoRoleValide)){
+                return response()->json([
+                    
+                    'message'=> 'Role modifié',
+                    'role'=>$role
+                ], 200);
+            }else{
+                return response()->json([
+                  
+                    'message'=> 'Role non modifié',
+                ]);
+            }
+        }
+        } catch (\Throwable $th) {
+            return response()->json([
+                  
+                'erreur'=> $th->getMessage(),
+            ]);
+        }
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(string $id)
     {
-        //
+        try {
+            $role = Role::findOrFail($id);
+           
+           
+                if($role->delete()){
+                    
+                        return response()->json([
+                            
+                            'message'=> 'Role supprimée',
+                        ], 204);
+                    }else{
+                        return response()->json([
+                            
+                            'message'=> 'Role non supprimée',
+                        ], 500);
+                    }
+            
+        } catch (\Throwable $th) {
+            return response()->json([
+                
+                'erreur'=> $th->getMessage(),
+            ]);
+        }
+        
     }
 }
