@@ -6,9 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StorePatientRequest extends FormRequest
+class UpdateMedecinRequest extends FormRequest
 {
-    /**
+      /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
@@ -25,12 +25,14 @@ class StorePatientRequest extends FormRequest
     {
         return [
             'nom' => ['required', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:8', 'confirmed'],
-            'password_confirmation' => ['required'],
+            'email' => ['required', 'email'],
+
             'genre' => ['required'],
-            'telephone' => ['required','regex:/^(70|75|76|77|78)[0-9]{7}$/'],
-            'ville_id' => ['required', 'Integer','exists:villes,id' ],
+            'telephone' => ['required', 'regex:/^(70|75|76|77|78)[0-9]{7}$/'],
+            'image' => ['image', 'mimes:png,jpeg,jpg'],
+            'ville_id' => ['required', 'integer', 'exists:villes,id'],
+            'secteur_activite_id' => ['required', 'integer', 'exists:secteur_activites,id'],
+            'hopital_id' => ['required', 'integer', 'exists:hopitals,id'],
             
         ];
     }
@@ -41,14 +43,18 @@ class StorePatientRequest extends FormRequest
             "nom.required" => 'Le nom est requis',
             "nom.min" => 'Le nom doit être composé de lettres, de chiffres et d\'espaces (au moins 2 caractères)',
             "email.required" => 'L\'email est requise',
-            "email.unique" => 'L\'email existe déjà',
             "email.email" => 'L\'email incorrecte',
-            "password.required" => 'Le mot de passe doit avoir (au moins 8 caractères)',
-            "password.confirmed" => 'Les mots de passe ne sont pas conforment',
-            "password_confirmation.required" => ' le champ confirmation mot de passe est requis',
+
+            "image.mimes" => 'Format d\'image incorrecte',
             "genre.required" => 'Le genre est requis',
+            "hopital_id.required" => 'L\'hopital est requise',
+            
             "ville_id.exists" => 'la ville est introuvable',
+            "role_id.exists" => 'le role est introuvable',
+            "secteur_activite_id.exists" => 'le secteur d\'activité est introuvable',
+            "hopital.exists" => 'le secteur d\'activité est introuvable',
             "ville_id.required" => 'La ville est requise',
+            "secteur_activite_id.required" => 'Le secteur d\'activité est requis'
 
 
 

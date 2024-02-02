@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class RoleFactory extends Factory
 {
-    /**
+     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -17,7 +17,31 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'nom' => 'admin'
+            'nom' => 'admin',
         ];
+    }
+
+    /**
+     * Define a state for the 'medecin' role.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function medecin(): Factory
+    {
+        return $this->state([
+            'nom' => 'medecin',
+        ]);
+    }
+
+    /**
+     * Define a state for the 'patient' role.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function patient(): Factory
+    {
+        return $this->state([
+            'nom' => 'patient',
+        ]);
     }
 }

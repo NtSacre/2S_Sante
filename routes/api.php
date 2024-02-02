@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\ConsultationController;
@@ -48,17 +49,22 @@ Route::middleware('medecin')->group(function(){
     ->name('consultation.accepterConsultation');
     Route::get('/contacter-patient/{patient}', [ConsultationController::class, 'contacterPatient'])
     ->name('contacterPatient');
+    Route::post('/modifier-compte/medecin/{medecin}',
+    [AuthController::class, 'modificationMedecin']);
 });
 
 Route::middleware('patient')->group(function () {
     Route::post('/consulter-docteur', [ConsultationController::class, 'store'])->name('consultation.store');
+    Route::post('/modifier-compte/patient/{patient}',[AuthController::class, 'modificationPatient']);
 
 });
 
 Route::middleware('admin')->group(function () {
-    Route::post('bloquer-medecin/{medecin}', [AuthController::class,'debloquerUser' ])->name('admin.debloquerUser');
-    Route::post('debloquer-medecin/{medecin}', [AuthController::class,'bloquerUser' ]);
-    Route::post('vailder-compte-medecin/{medecin}', [AuthController::class, 'accepterMedecin']);
+    Route::post('debloquer-user/{user}', [AuthController::class,'debloquerUser' ])->name('admin.debloquerUser');
+    Route::post('bloquer-user/{user}', [AuthController::class,'bloquerUser' ]);
+    Route::post('valider-compte-medecin/{medecin}', [AuthController::class, 'accepterMedecin']);
+    Route::apiResource('/role', RoleController::class);
+
 });
 
 Route::prefix('/home')->name('home.')->group(function(){

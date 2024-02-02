@@ -13,6 +13,8 @@ use App\Mail\ValidationCompteMedecin;
 use App\Http\Resources\MedecinResource;
 use App\Http\Requests\StoreMedecinRequest;
 use App\Http\Requests\StorePatientRequest;
+use App\Http\Requests\UpdateMedecinRequest;
+use App\Http\Requests\UpdatePatientRequest;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
 class AuthController extends Controller
@@ -180,6 +182,109 @@ public function registerMedecin(StoreMedecinRequest $request){
 
     }
 
+
+    public function modificationPatient(UpdatePatientRequest $request, string $id){
+
+        
+        try {
+            $patient = User::where('id', $id)->first();
+            $donneePatientValider=$request->validated();
+            $donneePatientValider['role_id']=3;
+
+            
+            if($patient->update($donneePatientValider)){
+                return response()->json([
+                'message' => 'compte modifié avec sucess',
+                    'user' => $patient,
+                ], 200);
+            }
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage(),
+                ], 500);
+        }
+
+    }
+
+    public function modificationMedecin(UpdateMedecinRequest $request, string $id){
+        try {
+            
+        $donneeMedecinValider=$request->validated();
+      
+        if ($request->file('image') !== null && !$request->file('image')->getError()) {
+            $donneeMedecinValider['image'] = $request->file('image')->store('image', 'public');
+
+            $donneeMedecinValider['role_id']=2;
+    $medecin = User::where('id', $id)->first();
+    $infoSupMedecin =InfoSupMedecin::where('user_id',$id)->first();
+            $medecin->updated([
+                'nom' => $donneeMedecinValider['nom'],
+                'email' => $donneeMedecinValider['email'],
+                'telephone' => $donneeMedecinValider['telephone'],
+                'genre' => $donneeMedecinValider['genre'],
+                'image' => $donneeMedecinValider['image'],
+                'role_id' => $donneeMedecinValider['role_id'],
+                'ville_id' => $donneeMedecinValider['ville_id'],
+
+            ]);
+            dd($medecin);
+             $infoSupMedecin=$infoSupMedecin->updated([
+                'hopital_id' => $donneeMedecinValider['hopital_id'],
+              'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
+              'user_id' => $medecin->id,
+    
+            ]);
+            if($medecin && $infoSupMedecin){
+                return response()->json([
+                 'message' => 'compte modifié',
+                    'user' => $medecin,
+                    'info_sup_medecin' => $infoSupMedecin,
+                ], 201);
+            }
+
+        }
+        $medecin = User::where('id', $id)->first();
+    $infoSupMedecin =InfoSupMedecin::where('user_id',$id)->first();
+
+        $donneeMedecinValider['role_id']=2;
+        $medecin->updated([
+            'nom' => $donneeMedecinValider['nom'],
+            'email' => $donneeMedecinValider['email'],
+            'telephone' => $donneeMedecinValider['telephone'],
+            'genre' => $donneeMedecinValider['genre'],
+            'role_id' => $donneeMedecinValider['role_id'],
+            'ville_id' => $donneeMedecinValider['ville_id'],
+
+        ]);
+     
+         $infoSupMedecin=$infoSupMedecin->updated([
+            'hopital_id' => $donneeMedecinValider['hopital_id'],
+          'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
+          'user_id' => $medecin->id,
+
+        ]);
+        if($medecin && $infoSupMedecin){
+            return response()->json([
+             'message' => 'Compte modifié avec succès',
+                'user' => new MedecinResource($medecin),
+            ], 201);
+        }
+    } catch (\Throwable $th) {
+
+      return response()->json([
+        'erreur' => $th->getMessage(),
+       ], 500);
+
+    }
+
+    }
+
+
+
+
+
+
     /**
     
      * block  patient .
@@ -190,6 +295,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
         try {
             $user = User::findOrFail($id);
+            $user->is_blocked = true;
             if($user->update()){
              return response()->json([
                  'message' => 'utilisateur bloqué avec succès'

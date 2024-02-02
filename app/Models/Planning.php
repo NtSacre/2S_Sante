@@ -15,6 +15,6 @@ class Planning extends Model
 
     public function medecin(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -78,10 +78,6 @@ class ConsultationController extends Controller
         ], 500);
        }
         
-
-            
-   
-        
     }
 
     /**

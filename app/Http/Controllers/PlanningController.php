@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Planning;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\PlanningResource;
 use App\Http\Requests\StorePlanningRequest;
 use App\Http\Requests\UpdatePlanningRequest;
 
@@ -73,9 +74,27 @@ class PlanningController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Planning $planning)
+    public function show(string $id)
     {
-        //
+        try {
+            $planning = Planning::findOrFail($id);
+            if($planning){
+             return response()->json([
+ 
+                 "planning" => new PlanningResource($planning)
+             ], 200);
+            }else{
+             return response()->json([
+ 
+                 "erreur" => "Planning n'a pas été trouvé"
+             ], 404);
+            }
+         } catch (\Throwable $th) {
+             return response()->json([
+                 "erreur" => $th->getMessage(),
+             ], 500);
+            
+         }
     }
 
     /**

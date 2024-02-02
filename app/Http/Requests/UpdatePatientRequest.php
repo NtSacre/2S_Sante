@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StorePatientRequest extends FormRequest
+class UpdatePatientRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,7 @@ class StorePatientRequest extends FormRequest
         return [
             'nom' => ['required', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:8', 'confirmed'],
-            'password_confirmation' => ['required'],
+
             'genre' => ['required'],
             'telephone' => ['required','regex:/^(70|75|76|77|78)[0-9]{7}$/'],
             'ville_id' => ['required', 'Integer','exists:villes,id' ],
@@ -43,9 +42,7 @@ class StorePatientRequest extends FormRequest
             "email.required" => 'L\'email est requise',
             "email.unique" => 'L\'email existe déjà',
             "email.email" => 'L\'email incorrecte',
-            "password.required" => 'Le mot de passe doit avoir (au moins 8 caractères)',
-            "password.confirmed" => 'Les mots de passe ne sont pas conforment',
-            "password_confirmation.required" => ' le champ confirmation mot de passe est requis',
+
             "genre.required" => 'Le genre est requis',
             "ville_id.exists" => 'la ville est introuvable',
             "ville_id.required" => 'La ville est requise',
