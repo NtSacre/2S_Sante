@@ -100,7 +100,7 @@ class ArticleController extends Controller
             return response()->json([
                 "erreur" => $th->getMessage(),
             ], 500);
-           
+
         }
     }
 
@@ -117,7 +117,7 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, $id )
     {
-        
+
         try {
 
             $article = Article::findOrFail($id);
@@ -165,17 +165,17 @@ class ArticleController extends Controller
         try {
             if ($article) {
                 $article->is_deleted = true;
-    
+
                 if ($article->update()) {
                     return response()->json([
-    
+
                         "message" => "l'article a été supprimer avec succès"
                     ], 200);
                 }
             }
         } catch (\Throwable $th) {
             return response()->json([
-    
+
                 "message" => $th->getMessage(),
             ], 404);
         }

@@ -58,7 +58,7 @@ Route::middleware('patient')->group(function () {
 Route::middleware('admin')->group(function () {
     Route::post('bloquer-medecin/{medecin}', [AuthController::class,'debloquerUser' ])->name('admin.debloquerUser');
     Route::post('debloquer-medecin/{medecin}', [AuthController::class,'bloquerUser' ]);
-    Route::post('vailder-compte-medecin/{medecin}', [AuthController::class, 'accepterMedecin']);
+    Route::post('valider-compte-medecin/{medecin}', [AuthController::class, 'accepterMedecin']);
 });
 
 Route::prefix('/home')->name('home.')->group(function(){
@@ -67,6 +67,6 @@ Route::prefix('/home')->name('home.')->group(function(){
     Route::get('/planning-medecin', [HomeController::class, 'planningMedecin'])->name('planningMedecin');
     Route::get('/planning-medecin', [HomeController::class, 'planningMedecin'])->name('planningMedecin');
     Route::get('detail-medecin', [HomeController::class, 'detailMedecin'])->name('detailMedecin');
-  
-  
+
+
   });
