@@ -25,7 +25,6 @@ class UpdateMedecinRequest extends FormRequest
     {
         return [
             'nom' => ['required', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
-            'email' => ['required', 'email'],
 
             'genre' => ['required'],
             'telephone' => ['required', 'regex:/^(70|75|76|77|78)[0-9]{7}$/'],
@@ -42,8 +41,7 @@ class UpdateMedecinRequest extends FormRequest
         return [
             "nom.required" => 'Le nom est requis',
             "nom.min" => 'Le nom doit être composé de lettres, de chiffres et d\'espaces (au moins 2 caractères)',
-            "email.required" => 'L\'email est requise',
-            "email.email" => 'L\'email incorrecte',
+        
 
             "image.mimes" => 'Format d\'image incorrecte',
             "genre.required" => 'Le genre est requis',

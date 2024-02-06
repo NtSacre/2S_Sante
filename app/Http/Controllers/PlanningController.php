@@ -16,17 +16,17 @@ class PlanningController extends Controller
     public function index()
     {
         $planning = Planning::where('user_id', Auth::user()->id)
-        ->where('is_deleted', false)->paginate(5);
-        if($planning->count() > 0){
+        ->where('is_deleted', false)->get();
+
+        if($planning->all() == null){
+            return response()->json([
+                'message' => 'aucun article pour l\'instant'
+            ], 204);
+        }
             return response()->json([
                 'plannings' => $planning
             ], 200);
-        }else{
-            return response()->json([
-               
-                'message' =>'Aucun planning enregistré',
-            ], 204);
-        }
+        
     }
 
     /**

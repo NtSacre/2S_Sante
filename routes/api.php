@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Temoignage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\PlanningController;
+use App\Http\Controllers\TemoignageController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\ResetPasswordController;
 
@@ -27,6 +29,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('refresh', 'refresh');
     Route::post('register-medecin','registerMedecin');
     Route::post('register-patient','registerPatient');
+
+
+
 
 
 });
@@ -57,12 +62,13 @@ Route::middleware('medecin')->group(function(){
 Route::middleware('patient')->group(function () {
     Route::post('/consulter-docteur', [ConsultationController::class, 'store'])->name('consultation.store');
     Route::post('/modifier-compte/patient/{patient}',[AuthController::class, 'modificationPatient']);
+    Route::apiResource('/temoignage', TemoignageController::class);
 
 });
 
 Route::middleware('admin')->group(function () {
-    Route::post('debloquer-user/{user}', [AuthController::class,'debloquerUser' ])->name('admin.debloquerUser');
-    Route::post('bloquer-user/{user}', [AuthController::class,'bloquerUser' ]);
+    Route::get('debloquer-user/{user}', [AuthController::class,'debloquerUser' ])->name('admin.debloquerUser');
+    Route::get('bloquer-user/{user}', [AuthController::class,'bloquerUser' ]);
     Route::post('valider-compte-medecin/{medecin}', [AuthController::class, 'accepterMedecin']);
     Route::apiResource('/role', RoleController::class);
 
@@ -74,6 +80,8 @@ Route::prefix('/home')->name('home.')->group(function(){
     Route::get('/planning-medecin', [HomeController::class, 'planningMedecin'])->name('planningMedecin');
     Route::get('/planning-medecin', [HomeController::class, 'planningMedecin'])->name('planningMedecin');
     Route::get('detail-medecin', [HomeController::class, 'detailMedecin'])->name('detailMedecin');
+    Route::get('/user-temoignages', [HomeController::class, 'toutTemoignage'])->name('toutTemoignage');
+
   
   
   });

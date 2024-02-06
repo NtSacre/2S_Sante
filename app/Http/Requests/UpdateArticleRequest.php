@@ -26,7 +26,7 @@ class UpdateArticleRequest extends FormRequest
         return [
             "titre" => ['required', 'string', 'max:255', 'min:2'],
             "description" => ['required', 'string', 'min:4'],
-            "image" => ['required', 'image', 'mimes:png,jpeg,jpg'],
+            "image" => ['image', 'mimes:png,jpeg,jpg'],
 
         ];
     }

@@ -17,17 +17,18 @@ class ArticleController extends Controller
     public function index()
     {
         $article = Article::where('user_id', Auth::user()->id)
-        ->where('is_deleted', false);
-    if ($article) {
+        ->where('is_deleted', false)->get();
+
+        if($article->all() == null){
+            return response()->json([
+                'message' => 'aucun article pour l\'instant'
+            ], 204);
+        }
+ 
         return response()->json([
             'Articles' => $article
         ], 200);
-    } else {
-        return response()->json([
-
-            'message' => 'Aucun Article enregistré',
-        ], 204);
-    }
+        
     }
 
 

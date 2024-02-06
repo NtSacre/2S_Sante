@@ -16,6 +16,7 @@ use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdateMedecinRequest;
 use App\Http\Requests\UpdatePatientRequest;
 use Illuminate\Foundation\Auth\User as AuthUser;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AuthController extends Controller
 {
@@ -183,11 +184,10 @@ public function registerMedecin(StoreMedecinRequest $request){
     }
 
 
-    public function modificationPatient(UpdatePatientRequest $request, string $id){
+    public function modificationPatient(UpdatePatientRequest $request, User $patient){
 
         
         try {
-            $patient = User::where('id', $id)->first();
             $donneePatientValider=$request->validated();
             $donneePatientValider['role_id']=3;
 
@@ -291,20 +291,21 @@ public function registerMedecin(StoreMedecinRequest $request){
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function bloquerUser(string $id){
+    public function bloquerUser(User $user){
 
         try {
-            $user = User::findOrFail($id);
             $user->is_blocked = true;
             if($user->update()){
              return response()->json([
                  'message' => 'utilisateur bloqué avec succès'
              ],200);
             }
+
         } catch (\Throwable $th) {
             return response()->json([
-                'erreur' => $th->getMessage()
-            ]);
+                'error' => 'Une erreur s\'est produite',
+                'details' => $th->getMessage()
+            ], 500);
         }
     
      
@@ -316,10 +317,11 @@ public function registerMedecin(StoreMedecinRequest $request){
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function debloquerUser(string $id){
+    public function debloquerUser(User  $user){
 
         try {
-            $user = User::findOrFail($id);
+            $user->is_blocked = false;
+
 
             if($user->update()){
 

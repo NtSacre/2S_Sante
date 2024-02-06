@@ -25,7 +25,6 @@ class UpdatePatientRequest extends FormRequest
     {
         return [
             'nom' => ['required', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
-            'email' => ['required', 'email', 'unique:users,email'],
 
             'genre' => ['required'],
             'telephone' => ['required','regex:/^(70|75|76|77|78)[0-9]{7}$/'],
@@ -39,10 +38,8 @@ class UpdatePatientRequest extends FormRequest
         return [
             "nom.required" => 'Le nom est requis',
             "nom.min" => 'Le nom doit être composé de lettres, de chiffres et d\'espaces (au moins 2 caractères)',
-            "email.required" => 'L\'email est requise',
-            "email.unique" => 'L\'email existe déjà',
-            "email.email" => 'L\'email incorrecte',
 
+            'telephone.regex' => 'Format numéro telephone invalid',
             "genre.required" => 'Le genre est requis',
             "ville_id.exists" => 'la ville est introuvable',
             "ville_id.required" => 'La ville est requise',

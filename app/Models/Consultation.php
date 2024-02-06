@@ -26,4 +26,14 @@ class Consultation extends Model
     {
         return $this->belongsTo(Planning::class);
     }
+
+    
+    protected static function boot()
+{
+    parent::boot();
+
+    static::creating(function ($consultation) {
+        $consultation->rappel_at = now()->subHours(24);
+    });
+}
 }
