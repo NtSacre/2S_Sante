@@ -81,7 +81,7 @@ class HomeController extends Controller
         ->where('plannings.is_deleted', false)
         ->get();
 
-if($plannings->all() !== null){
+if($plannings->all() == null){
     return response()->json([
                    
         "message" => 'Aucun planning publié',

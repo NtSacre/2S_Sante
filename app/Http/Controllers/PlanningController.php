@@ -29,13 +29,7 @@ class PlanningController extends Controller
         
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -74,20 +68,14 @@ class PlanningController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Planning $planning)
     {
         try {
-            $planning = Planning::findOrFail($id);
             if($planning){
              return response()->json([
  
-                 "planning" => new PlanningResource($planning)
+                 "planning" => $planning
              ], 200);
-            }else{
-             return response()->json([
- 
-                 "erreur" => "Planning n'a pas été trouvé"
-             ], 404);
             }
          } catch (\Throwable $th) {
              return response()->json([
@@ -97,21 +85,14 @@ class PlanningController extends Controller
          }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Planning $planning)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePlanningRequest $request, string $id)
+    public function update(UpdatePlanningRequest $request, Planning $planning)
     {
         try {
-$planning = Planning::findOrFail($id);
             $donneePlanningValide = $request->validated();
         
 
@@ -142,10 +123,9 @@ $planning = Planning::findOrFail($id);
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Planning $planning)
     {
        try {
-        $planning = Planning::findOrFail($id);
         if($planning){
             $planning->is_deleted = true;
            

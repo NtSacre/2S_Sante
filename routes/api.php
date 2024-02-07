@@ -61,7 +61,7 @@ Route::middleware('medecin')->group(function(){
 
 Route::middleware('patient')->group(function () {
     Route::post('/consulter-docteur', [ConsultationController::class, 'store'])->name('consultation.store');
-    Route::post('/modifier-compte/patient/{patient}',[AuthController::class, 'modificationPatient']);
+    Route::post('/modifier-compte/patient/{user}',[AuthController::class, 'modificationPatient']);
     Route::apiResource('/temoignage', TemoignageController::class);
 
 });

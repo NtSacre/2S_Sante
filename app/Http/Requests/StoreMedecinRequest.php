@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Hopital;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -28,7 +29,7 @@ class StoreMedecinRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:8', 'confirmed'],
             'password_confirmation' => ['required'],
-            'genre' => ['required'],
+            'genre' => ['required', 'in:homme,femme'],
             'telephone' => ['required', 'regex:/^(70|75|76|77|78)[0-9]{7}$/'],
             'image' => ['image', 'mimes:png,jpeg,jpg'],
             'ville_id' => ['required', 'integer', 'exists:villes,id'],
@@ -47,22 +48,36 @@ class StoreMedecinRequest extends FormRequest
             "email.unique" => 'L\'email existe déjà',
             "email.email" => 'L\'email incorrecte',
 
-            "password.required" => 'Le mot de passe doit avoir (au moins 8 caractères)',
-            "password.required" => 'Le mot de passe doit avoir (au moins 8 caractères)',
+            "password.required" => 'Le mot de passe est requis',
+            "password.min" => 'Le mot de passe doit avoir (au moins 8 caractères)',
+
             "password.confirmed" => 'Les mots de passe ne sont pas conforment',
+
+            "telephone.required" => 'Le numéro de telephone est requis',
+            "telephone.regex" => 'Format numéro de telephone invalid (77,78,76,70,75) suivi de 7 chiffres ',
 
 
             "password_confirmation.required" => ' le champ confirmation mot de passe est requis',
             "image.mimes" => 'Format d\'image incorrecte',
             "genre.required" => 'Le genre est requis',
-            "hopital_id.required" => 'L\'hopital est requise',
+            "genre.in" => 'Le genre doit être soit homme, soit femme',
+
+            "hopital_id.required" => 'L\'hopital est requis',
+            "secteur_activite_id.required" => 'Le secteur d\'activité est requis',
+            "ville_id.required" => 'La ville est requise',
+
+
             
             "ville_id.exists" => 'la ville est introuvable',
-            "role_id.exists" => 'le role est introuvable',
             "secteur_activite_id.exists" => 'le secteur d\'activité est introuvable',
-            "hopital.exists" => 'le secteur d\'activité est introuvable',
-            "ville_id.required" => 'La ville est requise',
-            "secteur_activite_id.required" => 'Le secteur d\'activité est requis'
+            "hopital_id.exists" => 'l\'Hopital est introuvable',
+
+            "hopital_id.integer" => 'l\'Hopital doit être de type integer',
+            "ville_id.integer" => 'la ville  doit être de type integer',
+
+            "secteur_activite_id.integer" => 'secteur activite  doit être de type integer',
+
+
 
 
 

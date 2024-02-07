@@ -28,7 +28,7 @@ class StorePatientRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:8', 'confirmed'],
             'password_confirmation' => ['required'],
-            'genre' => ['required'],
+            'genre' => ['required', 'in:homme,femme'],
             'telephone' => ['required','regex:/^(70|75|76|77|78)[0-9]{7}$/'],
             'ville_id' => ['required', 'Integer','exists:villes,id' ],
             
@@ -43,12 +43,22 @@ class StorePatientRequest extends FormRequest
             "email.required" => 'L\'email est requise',
             "email.unique" => 'L\'email existe déjà',
             "email.email" => 'L\'email incorrecte',
-            "password.required" => 'Le mot de passe doit avoir (au moins 8 caractères)',
+            "genre.required" => 'Le genre est requis',
+            "genre.in" => 'Le genre doit être soit homme, soit femme',
+            "telephone.required" => 'Le numéro de telephone est requis',
+            "telephone.regex" => 'Format numéro de telephone invalid (77,78,76,70,75) suivi de 7 chiffres ',
+            "password.required" => 'Le mot de passe est requis',
+            "password.min" => 'Le mot de passe doit avoir (au moins 8 caractères)',
+
             "password.confirmed" => 'Les mots de passe ne sont pas conforment',
+
+
             "password_confirmation.required" => ' le champ confirmation mot de passe est requis',
             "genre.required" => 'Le genre est requis',
             "ville_id.exists" => 'la ville est introuvable',
             "ville_id.required" => 'La ville est requise',
+            "ville_id.integer" => 'la ville  doit être de type integer',
+
 
 
 
