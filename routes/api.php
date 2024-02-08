@@ -85,9 +85,3 @@ Route::get('reset-password/{token}', [ResetPasswordController::class, 'showReset
 Route::post('reset-password', [ResetPasswordController::class, 'submitResetPasswordForm'])
     ->name('reset.password.post');
 
-  Route::post('motpasseoublie', [ResetPasswordController::class, 'soumettreMotpassOublie'])
-    ->name('motpasse.oublie.post');
-Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetPasswordForm'])
-    ->name('reset.password.get');
-Route::post('reset-password', [ResetPasswordController::class, 'submitResetPasswordForm'])
-    ->name('reset.password.post');
