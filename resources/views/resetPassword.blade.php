@@ -66,9 +66,10 @@ button:hover {
 </head>
 <body>
         <div class="container">
-        <form class="reset-form">
+        <form class="reset-form" action="{{route('reset.password.post')}}" method="post" >
+            @csrf
             <h2>Reset Password</h2>
-          
+            <input type="hidden" name="token" value="{{ $token }}">
             <input type="password" id="password" name="password" placeholder="Password" required>
             <input type="password" id="password_confirmation" name="password_confirmation"
             placeholder="Password Confirmation " required>

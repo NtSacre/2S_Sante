@@ -89,12 +89,13 @@ class ResetPasswordController extends Controller
      */
     public function submitResetPasswordForm(Request $request)
     {
+        
   
    $request->validate([
     'password' => 'required|string|min:8|confirmed',
-    'password_confirmation' => 'required|same:password',
+    'password_confirmation' => 'required',
 ]);
-
+   
         $updatePassword = DB::table('password_reset_tokens')
             ->where([
 

@@ -7,6 +7,7 @@ use App\Models\Ville;
 use App\Models\Article;
 use App\Models\Hopital;
 use App\Models\Planning;
+use App\Models\Temoignage;
 use Illuminate\Http\Request;
 use App\Models\SecteurActivite;
 use App\Http\Resources\VilleResource;
@@ -24,7 +25,7 @@ class HomeController extends Controller
         $hopitals = Hopital::all();
 
 
-       if($articles->isNotEmpty()) {
+       if($articles->all() !== null) {
            
         return response()->json([
                 
@@ -51,7 +52,7 @@ class HomeController extends Controller
     public function voirArticle(string $id){
         try {
            $article = Article::findOrFail($id);
-           if($article){
+          
             
 
             return response()->json([
@@ -59,7 +60,7 @@ class HomeController extends Controller
                 "article" => new ArticleResource($article),
     
             ], 200);
-        }
+        
 
 
         } catch (\Throwable $th) {
@@ -74,14 +75,33 @@ class HomeController extends Controller
 
     public function planningMedecin()
 {
-    $plannings = Planning::join('users', 'plannings.user_id', '=', 'users.id')
+    try {
+        $plannings = Planning::join('users', 'plannings.user_id', '=', 'users.id')
         ->select('plannings.*', 'users.nom as user_nom')
         ->where('plannings.is_deleted', false)
         ->get();
 
-    $groupedPlannings = $plannings->groupBy('user_nom');
+if($plannings->all() == null){
+    return response()->json([
+                   
+        "message" => 'Aucun planning publié',
+       
 
+    ], 204);
+}
+
+
+    $groupedPlannings = $plannings->groupBy('user_nom');
     return response()->json(['plannings' => $groupedPlannings]);
+
+    } catch (\Throwable $th) {
+        return response()->json([
+            'erreur' => $th->getMessage()
+        ]);
+
+    }
+
+
 }
 
 public function detailMedecin()
@@ -94,7 +114,7 @@ public function detailMedecin()
     ->with('infoSupMedecin')
     ->get();
 
-    if($medecin->isNotEmpty()){
+    if($medecin->all() !== null){
         
         return response()->json(['plannings' => MedecinResource::collection($medecin)], 200);
     }else{
@@ -103,5 +123,24 @@ public function detailMedecin()
     }
 
 }
+
+        /**
+     * Display a listing of the resource.
+     */
+    public function toutTemoignage()
+    {
+        $temoignages= Temoignage::where('is_deleted',false)->get();
+      
+        if($temoignages->all() == null){
+            return response()->json([
+                'message' => 'aucun témoignage pour l\'instant'
+            ], 204);
+        }
+         
+            return response()->json([
+                'temoignages' => $temoignages
+            ], 200);
+        
+    }
 
 }

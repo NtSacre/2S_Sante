@@ -17,17 +17,18 @@ class ArticleController extends Controller
     public function index()
     {
         $article = Article::where('user_id', Auth::user()->id)
-        ->where('is_deleted', false)->get();
-    if ($article) {
+        ->where('is_deleted', false)->get()->get();
+
+        if($article->all() == null){
+            return response()->json([
+                'message' => 'aucun article pour l\'instant'
+            ], 204);
+        }
+
         return response()->json([
             'Articles' => $article
         ], 200);
-    } else {
-        return response()->json([
 
-            'message' => 'Aucun Article enregistré',
-        ], 204);
-    }
     }
 
 
@@ -75,20 +76,15 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Article $article)
     {
         try {
-           $article = Article::findOrFail($id);
+
            if($article){
             return response()->json([
 
                 "article" => new ArticleResource($article)
             ], 200);
-           }else{
-            return response()->json([
-
-                "erreur" => "l'article n'a pas été trouvé"
-            ], 404);
            }
         } catch (\Throwable $th) {
             return response()->json([
@@ -103,26 +99,29 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateArticleRequest $request, $id )
+    public function update(UpdateArticleRequest $request, Article $article )
     {
 
         try {
 
-            $article = Article::findOrFail($id);
+
             $this->authorize('update', $article);
             $donneeArticleValide = $request->validated();
 
             $donneeArticleValide['user_id'] = Auth::user()->id;
 
-            $image = $request->file('image');
+$image = $request->file('image') ? $request->file('image') : null;
 
 
 
-            if ($image !== null && !$image->getError() && $article->image) {
+            if ($image !== null && !$image->getError()) {
+                if( $article->$image){
+                    Storage::disk('public')->delete($article->image);
 
-                Storage::disk('public')->delete($article->image);
+                }
+
+                $donneeArticleValide['image'] = $image->store('image', 'public');
             }
-            $donneeArticleValide['image'] = $image->store('image', 'public');
 
             if ($article->update($donneeArticleValide)) {
                 return response()->json([
@@ -147,9 +146,8 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Article $article)
     {
-        $article = Article::findOrFail($id);
         try {
             if ($article) {
                 $article->is_deleted = true;

@@ -119,7 +119,7 @@ class User extends Authenticatable  implements JWTSubject
      */
     public function consultations()
 {
-    return $this->hasManyThrough(Consultation::class, Planning::class);
+    return $this->hasManyThrough(Consultation::class, Planning::class,'user_id', 'planning_id', 'id', 'id');
 }
       /**
      * Get the consultation for the medecin.

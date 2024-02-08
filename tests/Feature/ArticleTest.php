@@ -65,36 +65,15 @@ return [
         $response->assertStatus(200)
         ->assertJsonStructure([
             'Articles' => [
-                'current_page',
-                'data' => [
-                    '*' => [
-                        'id',
-                        'titre',
-                        'description',
-                        'image',
-                        'user_id',
-                        'created_at',
-                        'updated_at',
-                    ],
-                ],
-                'first_page_url',
-                'from',
-                'last_page',
-                'last_page_url',
-                'links' => [
-                    '*' => [
-                        'url',
-                        'label',
-                        'active',
-                    ],
-                ],
-                'next_page_url',
-                'path',
-                'per_page',
-                'prev_page_url',
-                'to',
-                'total',
-            ],
+                '*'=> [
+                    'id',
+                    'titre',
+                    'description',
+                    'image',
+                    'created_at',
+                    'updated_at',
+                    ]
+            ]
         ]);
     }
 

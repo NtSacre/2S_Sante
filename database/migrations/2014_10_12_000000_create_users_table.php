@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('telephone')->unique();
+            $table->string('telephone');
             $table->boolean('is_blocked')->default(false);
             $table->enum('genre',['homme','femme']);
 

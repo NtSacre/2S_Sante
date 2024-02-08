@@ -24,15 +24,14 @@ class UpdateMedecinRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom' => ['required', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
-            'email' => ['required', 'email'],
+            'nom' => ['min:2', 'regex:/^[a-zA-Z\s]+$/'],
 
-            'genre' => ['required'],
-            'telephone' => ['required', 'regex:/^(70|75|76|77|78)[0-9]{7}$/'],
+            'genre' => [ 'in:homme,femme'],
+            'telephone' => ['regex:/^(70|75|76|77|78)[0-9]{7}$/'],
             'image' => ['image', 'mimes:png,jpeg,jpg'],
-            'ville_id' => ['required', 'integer', 'exists:villes,id'],
-            'secteur_activite_id' => ['required', 'integer', 'exists:secteur_activites,id'],
-            'hopital_id' => ['required', 'integer', 'exists:hopitals,id'],
+            'ville_id' => ['integer', 'exists:villes,id'],
+            'secteur_activite_id' => ['integer', 'exists:secteur_activites,id'],
+            'hopital_id' => ['integer', 'exists:hopitals,id'],
             
         ];
     }
@@ -40,21 +39,21 @@ class UpdateMedecinRequest extends FormRequest
     public function messages()
     {
         return [
-            "nom.required" => 'Le nom est requis',
+            "nom.regex" => 'le nom doit être composé de lettres uniquement',
             "nom.min" => 'Le nom doit être composé de lettres, de chiffres et d\'espaces (au moins 2 caractères)',
-            "email.required" => 'L\'email est requise',
-            "email.email" => 'L\'email incorrecte',
+        
 
             "image.mimes" => 'Format d\'image incorrecte',
-            "genre.required" => 'Le genre est requis',
-            "hopital_id.required" => 'L\'hopital est requise',
+            "genre.in" => 'Le genre doit être soit homme, soit femme',
             
             "ville_id.exists" => 'la ville est introuvable',
-            "role_id.exists" => 'le role est introuvable',
             "secteur_activite_id.exists" => 'le secteur d\'activité est introuvable',
             "hopital.exists" => 'le secteur d\'activité est introuvable',
-            "ville_id.required" => 'La ville est requise',
-            "secteur_activite_id.required" => 'Le secteur d\'activité est requis'
+            "ville_id.integer" => 'la ville  doit être de type integer',
+            "secteur_activite_id.integer" => 'secteur activite  doit être de type integer',
+            "hopital_id.integer" => 'l\'Hopital doit être de type integer',
+
+            
 
 
 

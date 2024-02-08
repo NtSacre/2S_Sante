@@ -24,12 +24,11 @@ class UpdatePatientRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom' => ['required', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
-            'email' => ['required', 'email', 'unique:users,email'],
+            'nom' => [ 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
 
-            'genre' => ['required'],
-            'telephone' => ['required','regex:/^(70|75|76|77|78)[0-9]{7}$/'],
-            'ville_id' => ['required', 'Integer','exists:villes,id' ],
+            'genre' => [ 'in:homme,femme'],
+            'telephone' => ['regex:/^(70|75|76|77|78)[0-9]{7}$/'],
+            'ville_id' => ['Integer','exists:villes,id' ],
             
         ];
     }
@@ -37,15 +36,13 @@ class UpdatePatientRequest extends FormRequest
     public function messages()
     {
         return [
-            "nom.required" => 'Le nom est requis',
             "nom.min" => 'Le nom doit être composé de lettres, de chiffres et d\'espaces (au moins 2 caractères)',
-            "email.required" => 'L\'email est requise',
-            "email.unique" => 'L\'email existe déjà',
-            "email.email" => 'L\'email incorrecte',
 
-            "genre.required" => 'Le genre est requis',
+            'telephone.regex' => 'Format numéro telephone invalid',
+            "genre.in" => 'Le genre doit être soit homme, soit femme',
             "ville_id.exists" => 'la ville est introuvable',
-            "ville_id.required" => 'La ville est requise',
+            "ville_id.integer" => 'la ville  doit être de type integer',
+
 
 
 

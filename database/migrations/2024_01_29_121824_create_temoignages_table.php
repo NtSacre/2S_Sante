@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('temoignages', function (Blueprint $table) {
             $table->id();
             $table->longText('temoignage');
+            $table->boolean('is_deleted')->default(false);
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->timestamps();
         });

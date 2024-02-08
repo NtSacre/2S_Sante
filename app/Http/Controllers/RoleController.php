@@ -34,7 +34,7 @@ class RoleController extends Controller
         if($role){
             return response()->json([
                
-                'message'=> 'Role enregistré avec succè',
+                'message'=> 'Role enregistré avec succès',
                 'role'=>$role
             ],201);
         }else{

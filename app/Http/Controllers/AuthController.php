@@ -4,18 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-
 use App\Models\InfoSupMedecin;
+
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ValidationCompteMedecin;
 use App\Http\Resources\MedecinResource;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreMedecinRequest;
 use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdateMedecinRequest;
 use App\Http\Requests\UpdatePatientRequest;
+use App\Http\Resources\PatientResource;
 use Illuminate\Foundation\Auth\User as AuthUser;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AuthController extends Controller
 {
@@ -41,9 +45,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(LoginRequest $request)
     {
-        $user = User::where('email',request('email'))->first();
+        $user = User::where('email',$request->email)->first();
         if($user == null){
             return response()->json([
              'message' => 'Utilisateur non trouvé'
@@ -58,14 +62,18 @@ class AuthController extends Controller
 
         }else{
 
-            $credentials = request(['email', 'password']);
+            $credentials = [
+                'email'=>$request->email,
+                'password'=>$request->password
+            ];
+           
 
             if (! $token = auth()->attempt($credentials)) {
                 return response()->json(['error' => 'non authorizé'], 401);
             }
     
             return $this->respondWithToken([
-                'user' => Auth::user(),
+                'user' => new MedecinResource(Auth::user()),
                 'token'=>$token
             ]);
 
@@ -75,14 +83,16 @@ class AuthController extends Controller
         return response()->json(['error' => 'Votre compte est bloqué'], 401);
 
     }
-    $credentials = request(['email', 'password']);
+    $credentials = [
+        'email'=>$request->email,
+        'password'=>$request->password
+    ];
 
     if (! $token = auth()->attempt($credentials)) {
         return response()->json(['error' => 'non authorizé'], 401);
     }
-
     return $this->respondWithToken([
-        'user' => Auth::user(),
+       'user' => new PatientResource(Auth::user()),
         'token'=>$token
     ]);
 }
@@ -105,7 +115,7 @@ public function registerMedecin(StoreMedecinRequest $request){
                 'password' => $donneeMedecinValider['password'],
                 'telephone' => $donneeMedecinValider['telephone'],
                 'genre' => $donneeMedecinValider['genre'],
-                'image' => $donneeMedecinValider['image'],
+                
                 'role_id' => $donneeMedecinValider['role_id'],
                 'ville_id' => $donneeMedecinValider['ville_id'],
 
@@ -113,6 +123,7 @@ public function registerMedecin(StoreMedecinRequest $request){
              $infoSupMedecin=InfoSupMedecin::create([
                 'hopital_id' => $donneeMedecinValider['hopital_id'],
               'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
+              'image' => $donneeMedecinValider['image'],
               'user_id' => $medecin->id,
     
             ]);
@@ -165,12 +176,13 @@ public function registerMedecin(StoreMedecinRequest $request){
         try {
             $donneePatientValider=$request->validated();
             $donneePatientValider['role_id']=3;
+            $donneePatientValider['password']=Hash::make($donneePatientValider['password']);
 
             $patient = User::create($donneePatientValider);
             if($patient){
                 return response()->json([
                 'message' => 'compte créé avec sucess',
-                    'user' => $patient,
+                    'user' => new PatientResource($patient),
                 ], 201);
             }
 
@@ -183,19 +195,20 @@ public function registerMedecin(StoreMedecinRequest $request){
     }
 
 
-    public function modificationPatient(UpdatePatientRequest $request, string $id){
+    public function modificationPatient(UpdatePatientRequest $request, User $user){
 
         
         try {
-            $patient = User::where('id', $id)->first();
             $donneePatientValider=$request->validated();
-            $donneePatientValider['role_id']=3;
-
-            
-            if($patient->update($donneePatientValider)){
+            if($user->role->nom === 'medecin' || $user->role->nom ==='admin'){
+                return response()->json([
+                    'error' => 'non autorisé',
+                    ], 403);
+            }
+            if($user->update($donneePatientValider)){
                 return response()->json([
                 'message' => 'compte modifié avec sucess',
-                    'user' => $patient,
+                    'user' => new PatientResource($user),
                 ], 200);
             }
 
@@ -211,49 +224,51 @@ public function registerMedecin(StoreMedecinRequest $request){
         try {
             
         $donneeMedecinValider=$request->validated();
-      
+        $medecin = User::where('id', $id)->first();
+        if($medecin->role->nom === 'patient' || $medecin->role->nom ==='admin'){
+            return response()->json([
+                'error' => 'non autorisé',
+                ], 403);
+        }
         if ($request->file('image') !== null && !$request->file('image')->getError()) {
+            if($medecin->image){
+                Storage::disk('public')->delete($medecin->image);
+
+            }
             $donneeMedecinValider['image'] = $request->file('image')->store('image', 'public');
 
-            $donneeMedecinValider['role_id']=2;
-    $medecin = User::where('id', $id)->first();
+    
     $infoSupMedecin =InfoSupMedecin::where('user_id',$id)->first();
             $medecin->update([
                 'nom' => $donneeMedecinValider['nom'],
-                'email' => $donneeMedecinValider['email'],
                 'telephone' => $donneeMedecinValider['telephone'],
                 'genre' => $donneeMedecinValider['genre'],
-                'image' => $donneeMedecinValider['image'],
-                'role_id' => $donneeMedecinValider['role_id'],
                 'ville_id' => $donneeMedecinValider['ville_id'],
 
             ]);
-            dd($medecin);
              $infoSupMedecin=$infoSupMedecin->update([
                 'hopital_id' => $donneeMedecinValider['hopital_id'],
               'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
-              'user_id' => $medecin->id,
+              'image' => $donneeMedecinValider['image'],
+
     
             ]);
             if($medecin && $infoSupMedecin){
                 return response()->json([
                  'message' => 'compte modifié',
-                    'user' => $medecin,
-                    'info_sup_medecin' => $infoSupMedecin,
-                ], 201);
+                 'user' => new MedecinResource($medecin),
+                ], 200);
             }
 
         }
-        $medecin = User::where('id', $id)->first();
+
     $infoSupMedecin =InfoSupMedecin::where('user_id',$id)->first();
 
         $donneeMedecinValider['role_id']=2;
         $medecin->update([
             'nom' => $donneeMedecinValider['nom'],
-            'email' => $donneeMedecinValider['email'],
             'telephone' => $donneeMedecinValider['telephone'],
             'genre' => $donneeMedecinValider['genre'],
-            'role_id' => $donneeMedecinValider['role_id'],
             'ville_id' => $donneeMedecinValider['ville_id'],
 
         ]);
@@ -261,14 +276,13 @@ public function registerMedecin(StoreMedecinRequest $request){
          $infoSupMedecin=$infoSupMedecin->update([
             'hopital_id' => $donneeMedecinValider['hopital_id'],
           'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
-          'user_id' => $medecin->id,
 
         ]);
         if($medecin && $infoSupMedecin){
             return response()->json([
              'message' => 'Compte modifié avec succès',
                 'user' => new MedecinResource($medecin),
-            ], 201);
+            ], 200);
         }
     } catch (\Throwable $th) {
 
@@ -291,20 +305,21 @@ public function registerMedecin(StoreMedecinRequest $request){
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function bloquerUser(string $id){
+    public function bloquerUser(User $user){
 
         try {
-            $user = User::findOrFail($id);
             $user->is_blocked = true;
             if($user->update()){
              return response()->json([
                  'message' => 'utilisateur bloqué avec succès'
              ],200);
             }
+
         } catch (\Throwable $th) {
             return response()->json([
-                'erreur' => $th->getMessage()
-            ]);
+                'error' => 'Une erreur s\'est produite',
+                'details' => $th->getMessage()
+            ], 500);
         }
     
      
@@ -316,10 +331,11 @@ public function registerMedecin(StoreMedecinRequest $request){
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function debloquerUser(string $id){
+    public function debloquerUser(User  $user){
 
         try {
-            $user = User::findOrFail($id);
+            $user->is_blocked = false;
+
 
             if($user->update()){
 
@@ -393,7 +409,7 @@ public function registerMedecin(StoreMedecinRequest $request){
      public function refresh()
      {
          return response()->json([
-             'user' => Auth::user(),
+             'user' => new PatientResource(Auth::user()),
              'authorisation' => [
                  'token' => Auth::refresh(),
                  'type' => 'bearer',

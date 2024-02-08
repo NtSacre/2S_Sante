@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Planning;
 use App\Models\Consultation;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AcceptationConsultation;
@@ -18,22 +19,41 @@ class ConsultationController extends Controller
      */
     public function index()
     {
-         // Récupérer le médecin connecté
+        //  // Récupérer le médecin connecté
+        //  $medecin = Auth::user();
+
+        //  // Récupérer les consultations du médecin
+        //  $consultations = $medecin->consultations;
+     
+        //  if ($consultations->isNotEmpty()) {
+        //      return response()->json([
+        //          'message' => 'Liste de demandes de consultation',
+        //          'consultations' => $consultations
+        //      ], 200);
+        //  } else {
+        //      return response()->json([
+        //          'message' => 'Aucune consultation pour l\'instant'
+        //      ], 200);
+        //  }
+
          $medecin = Auth::user();
 
-         // Récupérer les consultations du médecin
-         $consultations = $medecin->consultations;
-     
-         if ($consultations->isNotEmpty()) {
-             return response()->json([
-                 'message' => 'Liste de demandes de consultation',
-                 'consultations' => $consultations
-             ], 200);
-         } else {
-             return response()->json([
-                 'message' => 'Aucune consultation pour l\'instant'
-             ], 200);
-         }
+         $consultations = Consultation::whereHas('planning', function ($query) {
+            $query->where('user_id', Auth::id());
+        })
+        ->with(['user:id,nom'])
+        ->get();
+ 
+     if ($consultations->isNotEmpty()) {
+         return response()->json([
+             'message' => 'Liste de demandes de consultation',
+             'consultations' => $consultations
+         ], 200);
+     } else {
+         return response()->json([
+             'message' => 'Aucune consultation pour l\'instant'
+         ], 200);
+     }
 
     }
 
