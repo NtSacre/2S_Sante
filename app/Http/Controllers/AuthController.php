@@ -181,7 +181,7 @@ public function registerMedecin(StoreMedecinRequest $request){
             $patient = User::create($donneePatientValider);
             if($patient){
                 return response()->json([
-                'message' => 'compte créé avec sucess',
+                'message' => 'compte créé avec succès',
                     'user' => new PatientResource($patient),
                 ], 201);
             }
@@ -353,6 +353,41 @@ public function registerMedecin(StoreMedecinRequest $request){
 
      
         }
+
+
+        public function listeMedecin(){
+            // Récupérer les utilisateurs avec le rôle de médecin et charger les informations supplémentaires du médecin
+            $medecins = User::where('role_id', 2)->with('infoSupMedecin')->get();
+            // Vérifier s'il y a des médecins
+            if($medecins->all() === false){
+                return response()->json([
+                    'message' => 'Aucun médecin pour l\'instant'
+                ], 204);
+            }
+        
+            // Retourner les médecins avec leurs informations supplémentaires
+            return response()->json([
+                'medecins' => $medecins
+            ], 200);
+        }
+
+        public function listePatient(){
+            // Récupérer les utilisateurs avec le rôle de médecin et charger les informations supplémentaires du médecin
+            $patients = User::where('role_id', 3)->get();
+            // Vérifier s'il y a des médecins
+            if($patients->all() === false){
+                return response()->json([
+                    'message' => 'Aucun patient pour l\'instant'
+                ], 204);
+            }
+        
+            // Retourner les médecins avec leurs informations supplémentaires
+            return response()->json([
+                'patients' => $patients
+            ], 200);
+        }
+
+
 
         public function accepterMedecin(string $id){
 

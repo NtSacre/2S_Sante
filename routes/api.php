@@ -71,6 +71,10 @@ Route::middleware('admin')->group(function () {
     Route::get('bloquer-user/{user}', [AuthController::class,'bloquerUser' ]);
     Route::post('valider-compte-medecin/{medecin}', [AuthController::class, 'accepterMedecin']);
     Route::apiResource('/role', RoleController::class);
+    Route::get('liste-medecin/', [AuthController::class, 'listeMedecin']);
+    Route::get('liste-patient/', [AuthController::class, 'listePatient']);
+
+
 
 });
 
