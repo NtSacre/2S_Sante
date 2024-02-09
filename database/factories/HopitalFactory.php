@@ -17,7 +17,36 @@ class HopitalFactory extends Factory
     public function definition(): array
     {
         return [
-            'nom' => 'Fann'
+            'nom' => 'De La Paix'
         ];
+    }
+
+    public function Fann(): Factory
+    {
+        return $this->state([
+            'nom' => 'Fann',
+        ]);
+    }
+
+
+    public function GrandDakar(): Factory
+    {
+        return $this->state([
+            'nom' => 'Gaspard Camara',
+        ]);
+    }
+
+    public function Principal(): Factory
+    {
+        return $this->state([
+            'nom' => 'DANTEC',
+        ]);
+    }
+
+    public function GrandYoff(): Factory
+    {
+        return $this->state([
+            'nom' => 'Idrissa Pouye',
+        ]);
     }
 }

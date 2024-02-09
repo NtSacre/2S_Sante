@@ -20,4 +20,42 @@ class VilleFactory extends Factory
             'nom' => 'Dakar'
         ];
     }
+
+    public function Thies(): Factory
+    {
+        return $this->state([
+            'nom' => 'Thies',
+        ]);
+    }
+
+    public function Mbour(): Factory
+    {
+        return $this->state([
+            'nom' => 'Mbour',
+        ]);
+    }
+    public function Ziguinchor(): Factory
+    {
+        return $this->state([
+            'nom' => 'Ziguinchor',
+        ]);
+    }
+    public function Bignona(): Factory
+    {
+        return $this->state([
+            'nom' => 'Bignona',
+        ]);
+    }
+    public function Guediawaye(): Factory
+    {
+        return $this->state([
+            'nom' => 'Guediawaye',
+        ]);
+    }
+    public function Goree(): Factory
+    {
+        return $this->state([
+            'nom' => 'Goree',
+        ]);
+    }
 }

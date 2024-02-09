@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Seeders;
-
+use App\Models\Hopital;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +12,15 @@ class HopitalSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Hopital::factory(1)->create();
+        Hopital::factory()->create();
+
+        Hopital::factory()->Fann()->create();
+
+        Hopital::factory()->GrandDakar()->create();
+
+        Hopital::factory()->Principal()->create();
+        Hopital::factory()->GrandYoff()->create();
+
+
     }
 }

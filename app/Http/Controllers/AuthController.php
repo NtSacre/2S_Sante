@@ -34,10 +34,10 @@ class AuthController extends Controller
     }
 
 
-    
 
- 
-    
+
+
+
 
 
     /**
@@ -66,12 +66,12 @@ class AuthController extends Controller
                 'email'=>$request->email,
                 'password'=>$request->password
             ];
-           
+
 
             if (! $token = auth()->attempt($credentials)) {
                 return response()->json(['error' => 'non authorizé'], 401);
             }
-    
+
             return $this->respondWithToken([
                 'user' => new MedecinResource(Auth::user()),
                 'token'=>$token
@@ -96,26 +96,26 @@ class AuthController extends Controller
         'token'=>$token
     ]);
 }
-  
+
 public function registerMedecin(StoreMedecinRequest $request){
         try {
-            
+
         $donneeMedecinValider=$request->validated();
-      
+
         if ($request->file('image') !== null && !$request->file('image')->getError()) {
             $donneeMedecinValider['image'] = $request->file('image')->store('image', 'public');
 
             $donneeMedecinValider['password']=Hash::make($donneeMedecinValider['password']);
             $donneeMedecinValider['role_id']=2;
-    
-            
+
+
             $medecin = User::create([
                 'nom' => $donneeMedecinValider['nom'],
                 'email' => $donneeMedecinValider['email'],
                 'password' => $donneeMedecinValider['password'],
                 'telephone' => $donneeMedecinValider['telephone'],
                 'genre' => $donneeMedecinValider['genre'],
-                
+
                 'role_id' => $donneeMedecinValider['role_id'],
                 'ville_id' => $donneeMedecinValider['ville_id'],
 
@@ -125,7 +125,7 @@ public function registerMedecin(StoreMedecinRequest $request){
               'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
               'image' => $donneeMedecinValider['image'],
               'user_id' => $medecin->id,
-    
+
             ]);
             if($medecin && $infoSupMedecin){
                 return response()->json([
@@ -172,7 +172,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
     public function registerPatient(StorePatientRequest $request){
 
-        
+
         try {
             $donneePatientValider=$request->validated();
             $donneePatientValider['role_id']=3;
@@ -197,7 +197,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
     public function modificationPatient(UpdatePatientRequest $request, User $user){
 
-        
+
         try {
             $donneePatientValider=$request->validated();
             if($user->role->nom === 'medecin' || $user->role->nom ==='admin'){
@@ -222,7 +222,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
     public function modificationMedecin(UpdateMedecinRequest $request, string $id){
         try {
-            
+
         $donneeMedecinValider=$request->validated();
         $medecin = User::where('id', $id)->first();
         if($medecin->role->nom === 'patient' || $medecin->role->nom ==='admin'){
@@ -237,7 +237,7 @@ public function registerMedecin(StoreMedecinRequest $request){
             }
             $donneeMedecinValider['image'] = $request->file('image')->store('image', 'public');
 
-    
+
     $infoSupMedecin =InfoSupMedecin::where('user_id',$id)->first();
             $medecin->update([
                 'nom' => $donneeMedecinValider['nom'],
@@ -251,7 +251,7 @@ public function registerMedecin(StoreMedecinRequest $request){
               'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
               'image' => $donneeMedecinValider['image'],
 
-    
+
             ]);
             if($medecin && $infoSupMedecin){
                 return response()->json([
@@ -272,7 +272,7 @@ public function registerMedecin(StoreMedecinRequest $request){
             'ville_id' => $donneeMedecinValider['ville_id'],
 
         ]);
-     
+
          $infoSupMedecin=$infoSupMedecin->update([
             'hopital_id' => $donneeMedecinValider['hopital_id'],
           'secteur_activite_id' => $donneeMedecinValider['secteur_activite_id'],
@@ -292,6 +292,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
     }
 
+
     }
 
 
@@ -300,7 +301,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
 
     /**
-    
+
      * block  patient .
      *
      * @return \Illuminate\Http\JsonResponse
@@ -321,9 +322,9 @@ public function registerMedecin(StoreMedecinRequest $request){
                 'details' => $th->getMessage()
             ], 500);
         }
-    
-     
-     
+
+
+
         }
 
    /**
@@ -351,14 +352,14 @@ public function registerMedecin(StoreMedecinRequest $request){
              ]);
         }
 
-     
+
         }
 
         public function accepterMedecin(string $id){
 
             try {
                 $infomedecin = InfoSupMedecin::where('user_id',$id)->first();
-               
+
                 if($infomedecin){
                     $infomedecin->accepter = true;
 
@@ -369,21 +370,21 @@ public function registerMedecin(StoreMedecinRequest $request){
 
                         return response()->json([
                             'message' => 'Vous avez accepter la demande de Dr. '.$medecin->nom,
-                            
+
                         ], 200);
                     }
 
-                    
+
                 }
 
             } catch (\Throwable $th) {
                 return response()->json([
                     'message' => $th->getMessage(),
-                    
+
                 ], 500);
             }
         }
-    
+
 
     /**
      * Log the user out (Invalidate the token).
@@ -398,14 +399,14 @@ public function registerMedecin(StoreMedecinRequest $request){
     }
 
 
-    
+
 
     /**
      * Refresh a token.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-   
+
      public function refresh()
      {
          return response()->json([
@@ -416,7 +417,7 @@ public function registerMedecin(StoreMedecinRequest $request){
              ]
          ]);
      }
- 
+
 
  /**
   * Get the token array structure.
