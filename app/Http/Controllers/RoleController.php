@@ -133,12 +133,7 @@ $role = Role::findOrFail($id);
                         return response()->json([
                             
                             'message'=> 'Role supprimée',
-                        ], 204);
-                    }else{
-                        return response()->json([
-                            
-                            'message'=> 'Role non supprimée',
-                        ], 500);
+                        ], 200);
                     }
             
         } catch (\Throwable $th) {

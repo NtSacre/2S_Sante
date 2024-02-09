@@ -47,7 +47,7 @@ class PlanningController extends Controller
     
             if ($planning->save()) {
                 return response()->json([
-                    "message" => "Planning à été enregistrer avec succès",
+                    "message" => "Planning a été enregistré avec succès",
                     
                     "planning" => $planning
                 ], 201);
@@ -102,7 +102,7 @@ class PlanningController extends Controller
     
             if ($planning->update($donneePlanningValide)) {
                 return response()->json([
-                    "message" => "Planning à été modifier avec succès",
+                    "message" => "Planning a été modifié avec succès",
                     
                     "planning" => $planning
                 ], 200);
@@ -132,7 +132,7 @@ class PlanningController extends Controller
             if($planning->update()){
                 return response()->json([
                    
-                    "message" => "Planning a été supprimer avec succès"
+                    "message" => "Planning a été supprimé avec succès"
                 ], 200);
             }
         }
