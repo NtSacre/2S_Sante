@@ -13,7 +13,10 @@ class HopitalController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            
+            'hopitals'=> Hopital::all(),
+        ]);
     }
 
     /**

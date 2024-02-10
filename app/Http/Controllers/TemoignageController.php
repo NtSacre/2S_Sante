@@ -6,6 +6,7 @@ use App\Models\Temoignage;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTemoignageRequest;
 use App\Http\Requests\UpdateTemoignageRequest;
+use App\Http\Resources\TemoignageResource;
 
 class TemoignageController extends Controller
 {
@@ -25,7 +26,7 @@ class TemoignageController extends Controller
         }
          
             return response()->json([
-                'temoignages' => $temoignages
+                'temoignages' =>  TemoignageResource::collection($temoignages)
             ], 200);
         
     }

@@ -19,25 +19,6 @@ class ConsultationController extends Controller
      */
     public function index()
     {
-        //  // Récupérer le médecin connecté
-        //  $medecin = Auth::user();
-
-        //  // Récupérer les consultations du médecin
-        //  $consultations = $medecin->consultations;
-     
-        //  if ($consultations->isNotEmpty()) {
-        //      return response()->json([
-        //          'message' => 'Liste de demandes de consultation',
-        //          'consultations' => $consultations
-        //      ], 200);
-        //  } else {
-        //      return response()->json([
-        //          'message' => 'Aucune consultation pour l\'instant'
-        //      ], 200);
-        //  }
-
-         $medecin = Auth::user();
-
          $consultations = Consultation::whereHas('planning', function ($query) {
             $query->where('user_id', Auth::id());
         })

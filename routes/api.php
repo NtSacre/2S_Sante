@@ -10,7 +10,10 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\TemoignageController;
 use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\HopitalController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\SecteurActiviteController;
+use App\Http\Controllers\VilleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +74,16 @@ Route::middleware('admin')->group(function () {
     Route::get('bloquer-user/{user}', [AuthController::class,'bloquerUser' ]);
     Route::post('valider-compte-medecin/{medecin}', [AuthController::class, 'accepterMedecin']);
     Route::apiResource('/role', RoleController::class);
+    Route::apiResource('/hopital', HopitalController::class);
+    Route::apiResource('/secteur-activite', SecteurActiviteController::class);
+    Route::apiResource('/ville', VilleController::class);
+
+
+
+    Route::get('liste-medecin/', [AuthController::class, 'listeMedecin']);
+    Route::get('liste-patient/', [AuthController::class, 'listePatient']);
+
+
 
 });
 
@@ -92,4 +105,5 @@ Route::get('reset-password/{token}', [ResetPasswordController::class, 'showReset
     ->name('reset.password.get');
 Route::post('reset-password', [ResetPasswordController::class, 'submitResetPasswordForm'])
     ->name('reset.password.post');
+
 
