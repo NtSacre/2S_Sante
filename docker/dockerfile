@@ -1,34 +1,30 @@
 FROM php:8.2-apache
 
-#installation des extensions php
-RUN apt-get update && apt-get install -y \
-    git zip unzip libpng-dev \
-    libzip-dev default-mysql-client
-#active les extentions
-RUN docker-php-ext-install pdo pdo_mysql zip gd
+WORKDIR /var/www/html
 
-#installation du module apache pour la reecriture des url
-RUN a2enmod rewrite
-#cest comme un dossier ou on met des sous fichiers dedant 
-WORKDIR /var/www
-#ca permet de copier tous les dossier et le mettre dans le www
-COPY . /var/www
-#donner des droits d'accés pour le dossier storage
-RUN chown -R www-data:www-data /var/www/storage
+COPY . .
 
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# ajout de composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN apt-get update \
+    && apt-get install -qq -y --no-install-recommends \
+    cron \
+    vim \
+    locales coreutils apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev;
 
-# On utilise composer ici pour installer les dépendances de notre projet
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --optimize-autoloader --no-dev
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
 
-#l'image sera accessible sur le port 80 dans le projet
-EXPOSE 80
+RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
+    mv composer.phar /usr/local/bin/composer
 
-# Copier la configuration Apache personnalisée
-COPY ./docker/apache.conf /etc/apache2/sites-available/000-default.conf
-#il execute le continue du fichier docker.sh
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install pdo pdo_mysql mysqli gd opcache intl zip calendar dom mbstring zip gd xsl && a2enmod rewrite
+RUN pecl install apcu && docker-php-ext-enable apcu
+
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions amqp
 ENTRYPOINT [ "bash","./docker/docker.sh" ]
-#ca permet d'allumer le server apache
-CMD ["apache2-foreground"]
