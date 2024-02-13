@@ -116,9 +116,9 @@ public function detailMedecin()
 
     if($medecin->all() !== null){
         
-        return response()->json(['plannings' => MedecinResource::collection($medecin)], 200);
+        return response()->json(['medecins' => MedecinResource::collection($medecin)], 200);
     }else{
-        return response()->json(['message' => "aucun medecin trouvé"], 204);
+        return response()->json(['message' => "aucun medecin trouvé"], 200);
 
     }
 
