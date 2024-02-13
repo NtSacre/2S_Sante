@@ -95,8 +95,8 @@ Route::prefix('/home')->name('home.')->group(function(){
     Route::get('detail-medecin', [HomeController::class, 'detailMedecin'])->name('detailMedecin');
     Route::get('/user-temoignages', [HomeController::class, 'toutTemoignage'])->name('toutTemoignage');
 
-  
-  
+
+
   });
 
   Route::post('motpasseoublie', [ResetPasswordController::class, 'soumettreMotpassOublie'])
@@ -105,3 +105,5 @@ Route::get('reset-password/{token}', [ResetPasswordController::class, 'showReset
     ->name('reset.password.get');
 Route::post('reset-password', [ResetPasswordController::class, 'submitResetPasswordForm'])
     ->name('reset.password.post');
+
+

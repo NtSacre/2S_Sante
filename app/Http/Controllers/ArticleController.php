@@ -17,18 +17,18 @@ class ArticleController extends Controller
     public function index()
     {
         $article = Article::where('user_id', Auth::user()->id)
-        ->where('is_deleted', false)->get();
+        ->where('is_deleted', false)->get()->get();
 
         if($article->all() == null){
             return response()->json([
                 'message' => 'aucun article pour l\'instant'
             ], 204);
         }
- 
+
         return response()->json([
             'Articles' => $article
         ], 200);
-        
+
     }
 
 
@@ -79,7 +79,7 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         try {
-          
+
            if($article){
             return response()->json([
 
@@ -90,7 +90,7 @@ class ArticleController extends Controller
             return response()->json([
                 "erreur" => $th->getMessage(),
             ], 500);
-           
+
         }
     }
 
@@ -101,10 +101,10 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article )
     {
-        
+
         try {
 
-          
+
             $this->authorize('update', $article);
             $donneeArticleValide = $request->validated();
 
@@ -117,7 +117,7 @@ $image = $request->file('image') ? $request->file('image') : null;
             if ($image !== null && !$image->getError()) {
                 if( $article->$image){
                     Storage::disk('public')->delete($article->image);
-    
+
                 }
 
                 $donneeArticleValide['image'] = $image->store('image', 'public');
@@ -151,17 +151,17 @@ $image = $request->file('image') ? $request->file('image') : null;
         try {
             if ($article) {
                 $article->is_deleted = true;
-    
+
                 if ($article->update()) {
                     return response()->json([
-    
+
                         "message" => "l'article a été supprimer avec succès"
                     ], 200);
                 }
             }
         } catch (\Throwable $th) {
             return response()->json([
-    
+
                 "message" => $th->getMessage(),
             ], 404);
         }

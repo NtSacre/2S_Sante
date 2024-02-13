@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+use App\Models\SecteurActivite;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -12,7 +13,12 @@ class SecteurActiviteSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\SecteurActivite::factory(1)->create();
+        SecteurActivite::factory()->create();
 
+        SecteurActivite::factory()->Generaliste()->create();
+        SecteurActivite::factory()->Cardiologue()->create();
+        SecteurActivite::factory()->Neurologue()->create();
+        SecteurActivite::factory()->Pediatre()->create();
+        
     }
 }
