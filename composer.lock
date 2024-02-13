@@ -3530,7 +3530,6 @@
             "time": "2023-11-08T05:53:05+00:00"
         },
         {
-<<<<<<< HEAD
             "name": "swagger-api/swagger-ui",
             "version": "v5.11.3",
             "source": {
@@ -3594,10 +3593,6 @@
         {
             "name": "symfony/console",
             "version": "v6.4.2",
-=======
-            "name": "stella-maris/clock",
-            "version": "0.1.7",
->>>>>>> 17385370e49dac1a50b8165b8f84583782651d51
             "source": {
                 "type": "git",
                 "url": "https://github.com/stella-maris-solutions/clock.git",
