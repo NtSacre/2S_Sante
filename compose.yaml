@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+
+  2s_Santee:
+    build: docker/
+    container_name: 2s_Santee
+    image: ntandou/2s_sante:1.1
+    restart: always
+    ports:
+      - 8014:80
+    volumes:
+      - ./docker:/etc/apache2/sites-enabled
+      - ./:/var/www/html
+    depends_on:
+      - phpmyadmin
+    networks:
+      - reseau_2s_Sante
+
+  database:
+    image: mysql:8.2
+    container_name: mysql_2s_Sante
+    volumes:
+      - volume_db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ntandou
+      MYSQL_DATABASE: 2s_Sante
+    ports:
+      - 8002:3306
+    networks:
+      - reseau_2s_Sante
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin-2s_Sante
+    ports:
+      - 8081:80
+    environment:
+      MYSQL_ROOT_PASSWORD: ntandou
+      PMA_HOST: database
+    networks:
+      - reseau_2s_Sante
+    depends_on:
+      - database
+
+volumes:
+  volume_db:
+networks:
+  reseau_2s_Sante:
