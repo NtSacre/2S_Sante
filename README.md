@@ -1,66 +1,27 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 2S_Sante
+## I.Introduction
+La modernisation rapide de la technologie au Sénégal a apporté des changements significatifs dans divers secteurs, et le domaine de la santé ne fait pas exception. Cependant, malgré ces progrès globaux, des défis spécifiques persistent. L'un de ces défis concerne la planification des rendez-vous médicaux, une tâche qui reste souvent laborieuse et chronophage tant pour les patients que pour les professionnels de la santé.
+Aussi, l'importance de la sensibilisation à l'hygiène dans la société est cruciale pour promouvoir la santé publique et prévenir la propagation des maladies.
+C’est pourquoi, le choix de notre sujet est dirigé vers une solution qui permettra d'éradiquer ces problèmes.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Contexte
+Ainsi, nous souhaitons mettre en lumière les défis couramment rencontrés lors de la prise de rendez-vous, tels que la difficulté à trouver des créneaux disponibles, le suivi complexe des rendez-vous passés et à venir, ainsi que la gestion inefficace des informations des patients. Ces obstacles contribuent non seulement à une perte de temps, mais aussi à une expérience utilisateur souvent insatisfaisante.
 
-## About Laravel
+De plus, la sensibilisation à l'hygiène est une préoccupation majeure, le manque d'information sur les règles d'hygiène accentue les risques de maladies et de contaminations.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+C'est dans cette perspective que notre application 2S Santé vise à optimiser la manière dont les rendez-vous médicaux sont planifiés et gérés actuellement, pour ainsi simplifier et moderniser la planification des rendez-vous médicaux avec une approche intuitive. En plus de faciliter l'accès aux soins de santé, notre plateforme a aussi pour ambition de sensibiliser les utilisateurs aux règles d'hygiène, contribuant ainsi à une meilleure prévention des maladies et à une amélioration globale de la santé publique. Offrant aux utilisateurs la possibilité de prendre des rendez-vous en ligne et de bénéficier de consultations à distance, notre solution s'adapte ainsi au rythme de vie moderne.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Problématique
+Dans le contexte où le processus traditionnel de prise de rendez-vous médical est confronté à des défis majeurs, marqués par une demande croissante au sein des services médicaux et une pression grandissante sur ses infrastructures existantes, émerge un défi particulier. Les longues files d'attente, la perte de temps significative, le manque d'information sur les règles d'hygiène, et parfois la nécessité de déplacements inutiles deviennent des obstacles critiques à l'efficacité des soins de santé. Face à ces réalités, nous sommes parvenus à nous poser les questions suivantes :
+Comment surmonter les retards engendrés par les longues files d'attente dans les structures médicales afin de garantir un accès rapide aux soins ?
+Comment établir une communication ininterrompue entre les patients et les professionnels de la santé pour assurer une coordination optimale des soins ?
+Comment ajuster le secteur de la santé en évolution pour répondre efficacement aux besoins changeants des patients et améliorer leur expérience globale ?
+Comment remédier au manque d'information sur les règles d'hygiène et sensibiliser la population aux bonnes pratiques de santé ?
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Objectifs
+L'objectif principal de cette étude est de mettre en place  une plateforme web  non seulement de prise de rendez-vous entre patients et médecins mais aussi de sensibilisation aux règles d’hygiène. Pour concrétiser cet objectif, nous nous sommes fixé des objectifs spécifiques clairs :
+Optimiser les Délais : Réduire de manière significative les temps d'attente pour les rendez-vous médicaux, améliorant ainsi l'efficacité du processus.
+Facilité d'Utilisation : Simplifier le processus de prise de rendez-vous pour offrir aux utilisateurs une expérience fluide et efficace lors de la planification de leurs consultations médicales.
+Accessibilité améliorée : Faciliter la planification des rendez-vous afin d'accroître l'accessibilité aux soins de santé, favorisant ainsi une meilleure prise en charge des patients.
+Coordination Renforcée : Mettre en place une communication transparente entre les patients et les médecins pour renforcer la coordination des soins de santé, assurer une meilleure compréhension mutuelle et une prise en charge optimale.
+Sensibilisation à l'Hygiène: La plateforme inclut des fonctionnalités permettant aux médecins de publier des articles sur l'importance des bonnes pratiques d'hygiène. Les utilisateurs auront ainsi accès à des informations cruciales pour prévenir les maladies.
