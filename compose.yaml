@@ -10,7 +10,7 @@ services:
     ports:
       - 8014:80
     volumes:
-      - ./docker/php/vhosts:/etc/apache2/sites-enabled
+      - ./docker:/etc/apache2/sites-enabled
       - ./:/var/www/html
     depends_on:
       - phpmyadmin

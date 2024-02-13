@@ -81,6 +81,8 @@ Route::middleware('admin')->group(function () {
 
 
     Route::get('liste-medecin/', [AuthController::class, 'listeMedecin']);
+    Route::get('liste-user/', [AuthController::class, 'allUser']);
+
     Route::get('liste-patient/', [AuthController::class, 'listePatient']);
 
 

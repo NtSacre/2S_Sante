@@ -469,4 +469,13 @@ public function registerMedecin(StoreMedecinRequest $request){
          'expires_in' => Auth::factory()->getTTL() * 60
      ]);
  }
+
+ public function allUser(){
+    $users = User::all();
+
+    return response()->json([
+       'users' =>  PatientResource::collection($users)
+    ],200);
+ }
+ 
 }
