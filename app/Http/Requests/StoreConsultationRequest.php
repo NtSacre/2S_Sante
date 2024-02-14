@@ -26,7 +26,7 @@ class StoreConsultationRequest extends FormRequest
     {
         return [
             'planning_id' => ['required', 'Integer', 'exists:plannings,id'],
-            
+            "type" => ['required', 'in:en_ligne,presentiel'],
             "heure" => ['required','date_format:H:i:s'],
             "motif" => ['required', 'in:Consultation_generale,
             Prescription_de_médicaments_renouvelables,Suivi_de_traitement,
@@ -46,7 +46,9 @@ class StoreConsultationRequest extends FormRequest
             "heure.required" => 'L\'heure est requise',
             "heure.date_format" => 'Format heure incorrect',
             "motif.required" => 'Le motif est requis',
-            "motif.in" => 'Le motif non trouvé'
+            "motif.in" => 'Le motif non trouvé',
+            "type.required" => 'Le type est requis',
+            "type.in" => 'type non trouvé'
         ];
     }
 

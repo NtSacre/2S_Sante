@@ -71,7 +71,7 @@
         "/api/home/planning-medecin": {
             "get": {
                 "summary": "planning medecin",
-                "description": "route regroupant tous les planning et les médecins accociés",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -116,7 +116,7 @@
         "/api/home/voir-article/{article}": {
             "get": {
                 "summary": "voir un article",
-                "description": "route publique pour voir un article",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -166,7 +166,7 @@
         "/api/home/": {
             "get": {
                 "summary": "liste d'article",
-                "description": "route publique pour voir l'ensemble d'articlees de la plateforme",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -211,7 +211,7 @@
         "/api/home/user-temoignages": {
             "get": {
                 "summary": "liste de temoignage",
-                "description": "route public pour voir l'ensemble de temoignage de la plateforme",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -256,7 +256,7 @@
         "/api/consulter-docteur": {
             "post": {
                 "summary": "Prendre une consultation",
-                "description": "route accessible que par un patient pour prendre une consultation",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -324,13 +324,17 @@
                                     },
                                     "motif": {
                                         "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string"
                                     }
                                 }
                             },
                             "example": {
-                                "planning_id": 2,
+                                "planning_id": 1,
                                 "heure": "13:20:00",
-                                "motif": "Consultation_generale"
+                                "motif": "Consultation_generale",
+                                "type": "presentiel"
                             }
                         }
                     }
@@ -340,7 +344,7 @@
         "/api/liste-consultation": {
             "get": {
                 "summary": "liste de consultation",
-                "description": "route accessible que par un medecin pour voir la liste de ses consultations",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -390,7 +394,7 @@
         "/api/accepter-consultation/{consultation}": {
             "get": {
                 "summary": "Accepter une  consultation",
-                "description": "route accessible que par un medecin pour accepter une consultation",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -424,6 +428,11 @@
                     "Gestion consultation"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "consultation",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -440,7 +449,7 @@
         "/api/contacter-patient/{patient}": {
             "get": {
                 "summary": "Contacter patient",
-                "description": "route accessible que par un medecin pour contacter un medecin",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -475,6 +484,11 @@
                 ],
                 "parameters": [
                     {
+                        "in": "path",
+                        "name": "patient",
+                        "type": "string"
+                    },
+                    {
                         "in": "header",
                         "name": "User-Agent",
                         "type": "string"
@@ -490,7 +504,7 @@
         "/api/article": {
             "get": {
                 "summary": "tous les articles",
-                "description": "route accessible que par un medecin pour voir la liste de ses articles publiés",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -538,7 +552,7 @@
             },
             "post": {
                 "summary": "Enregistrer article",
-                "description": "route accessible que par un medecin pour publier un article",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -626,7 +640,7 @@
         "/api/article/{article}": {
             "delete": {
                 "summary": "supprimer article",
-                "description": "route accessible que par un medecin pour supprimer son article",
+                "description": "",
                 "responses": {
                     "204": {
                         "description": "Deleted successfully",
@@ -688,7 +702,7 @@
             },
             "get": {
                 "summary": "voir article",
-                "description": "route accessible que par un medecin pour voir son article",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -743,7 +757,7 @@
         "/api/update-article/{article}": {
             "post": {
                 "summary": "Modifier article",
-                "description": "route accessible que par un medecin pour modifier son article",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -836,7 +850,7 @@
         "/api/planning": {
             "get": {
                 "summary": "tous les plannings",
-                "description": "route accessible que par un medecin pour voir la liste de ses plannings",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -884,7 +898,7 @@
             },
             "post": {
                 "summary": "Enregistrer  planning",
-                "description": "route accessible que par un medecin pour enregistrer un planning",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -944,7 +958,7 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "jour": {
+                                    "date": {
                                         "type": "string"
                                     },
                                     "heure_debut": {
@@ -956,7 +970,7 @@
                                 }
                             },
                             "example": {
-                                "jour": "Lundi",
+                                "date": "2023-05-06",
                                 "heure_debut": "14:30:00",
                                 "heure_fin": "17:30:00"
                             }
@@ -968,7 +982,7 @@
         "/api/planning/{planning}": {
             "delete": {
                 "summary": "supprimer  planning",
-                "description": "route accessible que par un medecin pour supprimer son planning",
+                "description": "",
                 "responses": {
                     "204": {
                         "description": "Deleted successfully",
@@ -1030,7 +1044,7 @@
             },
             "get": {
                 "summary": "voir planning",
-                "description": "route accessible que par un medecin pour voir son planning",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1085,7 +1099,7 @@
         "/api/update-planning/{planning}": {
             "post": {
                 "summary": "Modifier  planning",
-                "description": "route accessible que par un medecin pour modifier son planning",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -1174,7 +1188,7 @@
         "/api/role/{role}": {
             "put": {
                 "summary": "modifier role",
-                "description": "route accessible que par l'admin pour modifier un role",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1248,7 +1262,7 @@
             },
             "delete": {
                 "summary": "Supprimer role",
-                "description": "route accessible que par l'admin pour supprimer un role",
+                "description": "",
                 "responses": {
                     "204": {
                         "description": "Deleted successfully",
@@ -1310,7 +1324,7 @@
             },
             "get": {
                 "summary": "voir  role",
-                "description": "route accessible que par l'admin pour voir un role",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1365,7 +1379,7 @@
         "/api/role": {
             "post": {
                 "summary": "Enregistrer role",
-                "description": "route accessible que par l'admin pour enregistrer un role",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -1443,7 +1457,7 @@
             },
             "get": {
                 "summary": "listes roles",
-                "description": "route accessible que par l'admin pour voir la liste des roles",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1493,7 +1507,7 @@
         "/api/ville/{ville}": {
             "put": {
                 "summary": "modifier  ville",
-                "description": "route accessible que par l'admin pour modifier une ville",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1563,7 +1577,7 @@
             },
             "delete": {
                 "summary": "Supprimer ville",
-                "description": "route accessible que par l'admin pour supprimer une ville",
+                "description": "",
                 "responses": {
                     "204": {
                         "description": "Deleted successfully",
@@ -1625,7 +1639,7 @@
             },
             "get": {
                 "summary": "voir une ville",
-                "description": "route accessible que par l'admin pour voir une ville",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1680,7 +1694,7 @@
         "/api/ville": {
             "post": {
                 "summary": "Enregistrer une ville",
-                "description": "route accessible que par l'admin pour enregistrer une ville",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -1754,7 +1768,7 @@
             },
             "get": {
                 "summary": "liste des villes",
-                "description": "route accessible que par l'admin pour voir la liste des villes",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1804,7 +1818,7 @@
         "/api/secteur-activite/{secteur-activite}": {
             "put": {
                 "summary": "modifier  secteur d'activité",
-                "description": "route accessible que par l'admin pour modifier un secteur d'activité",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1874,7 +1888,7 @@
             },
             "delete": {
                 "summary": "Supprimer secteur d'activité",
-                "description": "route accessible que par l'admin pour supprimer un secteur d'activité",
+                "description": "",
                 "responses": {
                     "204": {
                         "description": "Deleted successfully",
@@ -1991,7 +2005,7 @@
         "/api/secteur-activite": {
             "post": {
                 "summary": "Enregistrer secteur d'activité",
-                "description": "route accessible que par l'admin pour enregistrer un secteur d'activité",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -2065,7 +2079,7 @@
             },
             "get": {
                 "summary": "liste secteurs activités",
-                "description": "route accessible que par l'admin pour lister les secteurs d'activité",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2115,7 +2129,7 @@
         "": {
             "put": {
                 "summary": "modifier temoignage",
-                "description": "route accessible que par un patient pour modifier un temoignage",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2185,7 +2199,7 @@
             },
             "delete": {
                 "summary": "Supprimer temoignage",
-                "description": "route accessible que par un patient pour supprimer un temoignage",
+                "description": "",
                 "responses": {
                     "204": {
                         "description": "Deleted successfully",
@@ -2302,7 +2316,7 @@
         "/api/temoignage": {
             "post": {
                 "summary": "Enregistrer  temoignage",
-                "description": "route accessible que par un patient pour enregistrer un temoignage",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -2376,7 +2390,7 @@
             },
             "get": {
                 "summary": "listes temoignages",
-                "description": "route accessible que par un patient pour voir l'ensemble de ses temoignages",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2426,7 +2440,7 @@
         "/api/motpasseoublie": {
             "post": {
                 "summary": "Mot de passe oublié",
-                "description": "route publique pour reinintialiser le mot de passe",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -2497,7 +2511,7 @@
         "/api/valider-compte-medecin/{medecin}": {
             "post": {
                 "summary": "Valider medecin",
-                "description": "route accessible que par l'admin pour Valider un medecin",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -2561,7 +2575,7 @@
         "/api/bloquer-user/{user}": {
             "get": {
                 "summary": "bloquer un utilisateur",
-                "description": "route accessible que par l'admin pour bloquer un utilisateur",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2616,7 +2630,7 @@
         "/api/liste-medecin": {
             "get": {
                 "summary": "liste des medecins",
-                "description": "route accessible que par l'admin pour voir la liste des médecins",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2666,7 +2680,57 @@
         "/api/liste-patient": {
             "get": {
                 "summary": "liste des patients",
-                "description": "route accessible que par l'admin pour voir la liste des patients",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion utilisateur"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/liste-user": {
+            "get": {
+                "summary": "liste des  utilisateurs",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2716,7 +2780,7 @@
         "/api/debloquer-user/{user}": {
             "get": {
                 "summary": "débloquer utilisateur",
-                "description": "route accessible que par l'admin pour debloquer un utilisateur",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2771,7 +2835,7 @@
         "/api/register-medecin": {
             "post": {
                 "summary": "Enregistrer médecin ",
-                "description": "route pour enregistrer un médecin",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -2887,7 +2951,7 @@
         "/api/modifier-compte/medecin/{medecin}": {
             "post": {
                 "summary": "Modifier compte médecin ",
-                "description": "route accessible que par un medecin pour modifier son profil",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -3000,7 +3064,7 @@
         "/api/register-patient": {
             "post": {
                 "summary": "Enregistrer patient",
-                "description": "route pour enregistrer un patient",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -3079,7 +3143,7 @@
                                 }
                             },
                             "example": {
-                                "nom": "Ntandou Sacre",
+                                "nom": "Ntandou Ray",
                                 "email": "margenintandou@gmail.com",
                                 "password": "12345678",
                                 "telephone": "778524560",
@@ -3095,7 +3159,7 @@
         "/api/modifier-compte/patient/{patient}": {
             "post": {
                 "summary": "Modification compte patient",
-                "description": "route accessible que par un patient pour modifier son profil",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -3188,7 +3252,7 @@
         "/api/refresh": {
             "post": {
                 "summary": "Rafraichir token",
-                "description": "route pour rafraichir le token d'un utilisateur",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -3247,7 +3311,7 @@
         "/api/logout": {
             "post": {
                 "summary": "Deconnecter un utilisateur",
-                "description": "route pour déconnecter un utilisateur",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -3306,7 +3370,7 @@
         "/api/login": {
             "post": {
                 "summary": "Connecter un utilisateur",
-                "description": "route pour connecter un utilisateur",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
@@ -3370,8 +3434,8 @@
                                 }
                             },
                             "example": {
-                                "email": "admin@example.com",
-                                "password": "password"
+                                "email": "margenintandou@gmail.com",
+                                "password": "12345678"
                             }
                         }
                     }

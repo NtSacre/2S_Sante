@@ -28,6 +28,8 @@ return new class extends Migration
             'Deuxieme_avis_medical','Suivi_post_operatoire',
             'Question_de_sante_sexuelle']);
             $table->enum('status',['accepter','refuser'])->default('refuser');
+            $table->enum('type',['en_ligne','presentiel'])->default('en_ligne');
+
             $table->timestamp('rappel_at')->nullable();
             $table->timestamps();
         });

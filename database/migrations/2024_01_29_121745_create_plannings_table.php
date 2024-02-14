@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('plannings', function (Blueprint $table) {
             $table->id();
-            $table->enum('jour',['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']);
+            $table->date('date');
             $table->time('heure_debut');
             $table->time('heure_fin');
             $table->enum('status',['disponible','pas_disponible'])->default('disponible');

@@ -24,7 +24,7 @@ class UpdatePlanningRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "jour" => ['required', 'in:Lundi,Mardi,Mercredi,Jeudi,Vendredi,Samedi,Dimanche'],
+            "date" => ['required', 'date'],
             "heure_debut" => ['required','date_format:H:i:s'],
             "heure_fin" => ['required', 'date_format:H:i:s']
             
@@ -35,8 +35,8 @@ class UpdatePlanningRequest extends FormRequest
     public function messages()
     {
         return [
-            "jour.required" => 'Le champs jour est requis',
-            "jour.in" => 'Le jour doit être de format (e.g: Lundi, Mardi...) ',
+            "date.required" => 'Le champs date est requis',
+            "date.date" => 'La date doit être de format date',
             "heure_debut.required" => 'L\'heure de debut est obligatoire',
             "heure_fin.required" => 'L\'heure de fin est obligatoire',
             "heure_debut.date_format" => 'Format heure de debut  incorrect',
