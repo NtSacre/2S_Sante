@@ -27,7 +27,7 @@ class StoreConsultationRequest extends FormRequest
         return [
             'planning_id' => ['required', 'Integer', 'exists:plannings,id'],
             "type" => ['required', 'in:en_ligne,presentiel'],
-            "heure" => ['required','date_format:H:i:s'],
+            "heure" => ['required','date_format:H:i'],
             "motif" => ['required', 'in:Consultation_generale,
             Prescription_de_médicaments_renouvelables,Suivi_de_traitement,
             Conseils_sur_des_symptomes_mineurs,

@@ -16,10 +16,6 @@ class HopitalResource extends JsonResource
     {
         return [
             'id' => $this->id,
-<<<<<<< HEAD
-
-=======
->>>>>>> 720bc2b6e02b26e4ee6a8224f3bf041d3208468c
             'nom'=> $this->nom
         ];
     }

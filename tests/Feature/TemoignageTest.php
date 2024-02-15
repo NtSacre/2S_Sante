@@ -61,7 +61,7 @@ return [
                     'id',
                     'temoignage',
                     'created_at',
-                    'updated_at',
+                    'patient',
                     ]
                     
                 ],

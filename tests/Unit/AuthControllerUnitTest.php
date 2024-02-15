@@ -43,11 +43,10 @@ class AuthControllerUnitTest extends TestCase
 
         // Envoyez une demande de connexion avec les identifiants valides
         $request = new LoginRequest([
-            'email' => 'robertyacht@example.com',
+            'email' => 'hebert@example.com',
             'password' => 'password123',
         ]);
         $response = $this->authController->login($request);
-
         $this->assertArrayHasKey('access_token', $response->original);
         $this->assertArrayHasKey('token_type', $response->original);
         $this->assertArrayHasKey('expires_in', $response->original);

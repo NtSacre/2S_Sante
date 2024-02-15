@@ -139,6 +139,6 @@ return [
 
         $response = $this->deleteJson("api/role/$role->id");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
     }
 }

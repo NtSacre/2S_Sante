@@ -68,7 +68,7 @@
                 ]
             }
         },
-        "/api/home/planning-medecin": {
+        "/api/home/planning-medecin/{medecin}": {
             "get": {
                 "summary": "planning medecin",
                 "description": "",
@@ -105,6 +105,11 @@
                     "Page d'acceuille"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "medecin",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -152,7 +157,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "",
+                        "name": "article",
                         "type": "string"
                     },
                     {

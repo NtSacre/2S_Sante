@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\PlanningResource;
 use App\Http\Requests\StorePlanningRequest;
 use App\Http\Requests\UpdatePlanningRequest;
+use Tests\Feature\PlanningTest;
 
 class PlanningController extends Controller
 {
@@ -74,7 +75,7 @@ class PlanningController extends Controller
             if($planning){
              return response()->json([
  
-                 "planning" => $planning
+                 "planning" => new PlanningResource($planning)
              ], 200);
             }
          } catch (\Throwable $th) {

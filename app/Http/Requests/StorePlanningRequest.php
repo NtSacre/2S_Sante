@@ -24,8 +24,8 @@ class StorePlanningRequest extends FormRequest
     {
         return [
             "date" => ['required', 'date'],
-            "heure_debut" => ['required','date_format:H:i:s'],
-            "heure_fin" => ['required', 'date_format:H:i:s']
+            "heure_debut" => ['required','date_format:H:i'],
+            "heure_fin" => ['required', 'date_format:H:i']
 
 
         ];

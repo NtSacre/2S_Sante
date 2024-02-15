@@ -46,9 +46,9 @@ class PlanningTest extends TestCase
   
 return [
 
-    "jour"=> "Lundi",
-	"heure_debut"=> "14:30:00",
-	"heure_fin"=> "17:30:00",
+    "date"=> "2024-01-01",
+	"heure_debut"=> "14:30",
+	"heure_fin"=> "17:30",
     'user_id' => $medecin->id,
     'is_deleted' => false,
 ];
@@ -70,7 +70,7 @@ return [
          
                     '*' => [
                         "id",
-                        "jour" ,
+                        "date" ,
                         "heure_debut",
                         "heure_fin",
                         "status",
@@ -97,7 +97,7 @@ return [
             ->assertJsonStructure([
                 'message',
                 'planning' => [
-                    "jour",
+                    "date",
                     "heure_debut",
                     "heure_fin",
                     "user_id",
@@ -123,7 +123,7 @@ return [
             ->assertJsonStructure([
                 'planning' => [
                     "id",
-                    "jour",
+                    "date",
                     "heure_debut",
                     "heure_fin",
                     "medecin"=> [
@@ -159,7 +159,7 @@ return [
                 'message',
                 'planning' => [
                     "id",
-                    "jour",
+                    "date",
                     "heure_debut",
                     "heure_fin",
                     "status",
@@ -183,7 +183,7 @@ return [
 
         $response->assertStatus(200)
             ->assertJson([
-                'message' =>  "Planning a été supprimer avec succès",
+                'message' =>  "Planning a été supprimé avec succès",
             ]);
     }
 

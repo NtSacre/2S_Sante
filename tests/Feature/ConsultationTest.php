@@ -49,7 +49,7 @@ class ConsultationTest extends TestCase
   
 return [
 
-    "jour"=> "Lundi",
+    "date"=> "2024-01-02",
 	"heure_debut"=> "14:30:00",
 	"heure_fin"=> "17:30:00",
     'user_id' => $medecin->id,
@@ -77,6 +77,7 @@ return [
             "planning_id"=>2,
             "heure"=> "13:20:00",
             "motif" => "Consultation_generale",
+            "type"=>'en_ligne',
             "user_id" => 2,
 
         ]);
@@ -109,8 +110,10 @@ return [
 
         $data = [
             "planning_id"=>3,
-            "heure"=> "13:20:00",
-            "motif" => "Consultation_generale"
+            "heure"=> "13:20",
+            "motif" => "Consultation_generale",
+            "type"=>'en_ligne',
+
         ];
 
         $response = $this->postJson(route('consultation.store'), $data);
