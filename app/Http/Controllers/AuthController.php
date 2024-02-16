@@ -56,9 +56,9 @@ class AuthController extends Controller
         if($user->role->nom == 'medecin'){
 
         if($user->infoSupMedecin->accepter === 1 && $user->is_blocked !== 0){
-            return response()->json(['error' => 'Votre compte est bloqué'], 401);
+            return response()->json(['message' => 'Votre compte est bloqué'], 404);
         }elseif ($user->infoSupMedecin->accepter === 0 && $user->is_blocked === 0){
-            return response()->json(['error' => 'validation compte en cours'], 401);
+            return response()->json(['message' => 'validation compte en cours'], 200);
 
         }else{
 
@@ -69,7 +69,7 @@ class AuthController extends Controller
 
 
             if (! $token = auth()->attempt($credentials)) {
-                return response()->json(['error' => 'non authorizé'], 401);
+                return response()->json(['error' => 'mot de passe ou email invalide'], 401);
             }
 
             return $this->respondWithToken([
@@ -80,7 +80,7 @@ class AuthController extends Controller
         }
 
     }elseif($user->is_blocked !== 0){
-        return response()->json(['error' => 'Votre compte est bloqué'], 401);
+        return response()->json(['error' => 'Votre compte est bloqué'], 404);
 
     }
     $credentials = [
@@ -89,7 +89,7 @@ class AuthController extends Controller
     ];
 
     if (! $token = auth()->attempt($credentials)) {
-        return response()->json(['error' => 'non authorizé'], 401);
+        return response()->json(['error' => 'mot de passe ou email invalide'], 401);
     }
     return $this->respondWithToken([
        'user' => new PatientResource(Auth::user()),
