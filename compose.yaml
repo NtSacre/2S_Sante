@@ -2,13 +2,13 @@ version: '3.9'
 
 services:
 
-  2s_Santee:
+  2s_Santer:
     build: docker/
-    container_name: 2s_Santee
-    image: ntandou/2s_sante:1.1
+    container_name: 2s_Santer
+    image: ntandou/2s_sante:1.3
     restart: always
     ports:
-      - 8014:80
+      - 8016:80
     volumes:
       - ./docker:/etc/apache2/sites-enabled
       - ./:/var/www/html

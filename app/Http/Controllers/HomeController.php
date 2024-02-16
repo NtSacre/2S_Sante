@@ -73,36 +73,35 @@ class HomeController extends Controller
  
     }
 
-    public function planningMedecin()
-{
-    try {
-        $plannings = Planning::join('users', 'plannings.user_id', '=', 'users.id')
-        ->select('plannings.*', 'users.nom as user_nom')
-        ->where('plannings.is_deleted', false)
-        ->get();
-
-if($plannings->all() == null){
-    return response()->json([
-                   
-        "message" => 'Aucun planning publié',
-       
-
-    ], 204);
-}
-
-
-    $groupedPlannings = $plannings->groupBy('user_nom');
-    return response()->json(['plannings' => $groupedPlannings]);
-
-    } catch (\Throwable $th) {
+    public function planningMedecin(User $medecin)
+    {
+        try {
+            $plannings = Planning::where('is_deleted', 0)
+            ->where('user_id', $medecin->id)
+            ->get();
+    
+    if($plannings->all() == null){
         return response()->json([
-            'erreur' => $th->getMessage()
-        ]);
-
+    
+            "message" => 'Aucun planning publié',
+    
+    
+        ], 204);
     }
-
-
-}
+    
+    
+    
+        return response()->json(['plannings' => $plannings]);
+    
+        } catch (\Throwable $th) {
+            return response()->json([
+                'erreur' => $th->getMessage()
+            ]);
+    
+        }
+    
+    
+    }
 
 public function detailMedecin()
 {

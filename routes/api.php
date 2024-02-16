@@ -92,8 +92,7 @@ Route::middleware('admin')->group(function () {
 Route::prefix('/home')->name('home.')->group(function(){
     Route::get('/', [HomeController::class, 'article'])->name('article');
     Route::get('/voir-article/{article}', [HomeController::class, 'voirArticle'])->name('voirArticle');
-    Route::get('/planning-medecin', [HomeController::class, 'planningMedecin'])->name('planningMedecin');
-    Route::get('/planning-medecin', [HomeController::class, 'planningMedecin'])->name('planningMedecin');
+    Route::get('/planning-medecin/{medecin}', [HomeController::class, 'planningMedecin'])->name('planningMedecin');
     Route::get('detail-medecin', [HomeController::class, 'detailMedecin'])->name('detailMedecin');
     Route::get('/user-temoignages', [HomeController::class, 'toutTemoignage'])->name('toutTemoignage');
 

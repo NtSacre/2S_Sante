@@ -28,26 +28,25 @@ class AuthControllerUnitTest extends TestCase
 
     public function testUnitLoginWithValidCredentials()
     {
-        //Créez un utilisateur avec des identifiants valides
-        //  User::factory()->create([
-        //     'nom'=> 'heber tochi',
-        //     'email' => 'hebert@example.com',
-        //     'password' => Hash::make('password123'),
-        //     'telephone'=>'779999911',
-        //     'genre' => 'homme',
-        //     'role_id' => 3,
-        //     'ville_id' => 1,
+       // Créez un utilisateur avec des identifiants valides
+         User::factory()->create([
+            'nom'=> 'heber tochi',
+            'email' => 'hebert@example.com',
+            'password' => Hash::make('password123'),
+            'telephone'=>'779999911',
+            'genre' => 'homme',
+            'role_id' => 3,
+            'ville_id' => 1,
 
-        //     'is_blocked' => 0,
-        // ]);
+            'is_blocked' => 0,
+        ]);
 
         // Envoyez une demande de connexion avec les identifiants valides
         $request = new LoginRequest([
-            'email' => 'robertyacht@example.com',
+            'email' => 'hebert@example.com',
             'password' => 'password123',
         ]);
         $response = $this->authController->login($request);
-
         $this->assertArrayHasKey('access_token', $response->original);
         $this->assertArrayHasKey('token_type', $response->original);
         $this->assertArrayHasKey('expires_in', $response->original);
@@ -56,21 +55,21 @@ class AuthControllerUnitTest extends TestCase
     public function testLoginWithUserBlocked()
     {
         //Créez un utilisateur avec des identifiants valides
-        //  User::factory()->create([
-        //     'nom'=> 'heber tochi',
-        //     'email' => 'hebert@example.com',
-        //     'password' => Hash::make('password123'),
-        //     'telephone'=>'779999911',
-        //     'genre' => 'homme',
-        //     'role_id' => 3,
-        //     'ville_id' => 1,
+         User::factory()->create([
+            'nom'=> 'heber tochi',
+            'email' => 'albertine@example.com',
+            'password' => Hash::make('password123'),
+            'telephone'=>'779999912',
+            'genre' => 'homme',
+            'role_id' => 3,
+            'ville_id' => 1,
 
-        //     'is_blocked' => 0,
-        // ]);
+            'is_blocked' => 1,
+        ]);
 
         // Envoyez une demande de connexion avec les identifiants valides
         $request = new LoginRequest([
-            'email' => 'roger@example.com',
+            'email' => 'albertine@example.com',
             'password' => 'password123',
         ]);
         $response = $this->authController->login($request);

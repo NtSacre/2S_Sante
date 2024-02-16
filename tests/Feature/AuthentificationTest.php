@@ -300,7 +300,7 @@ public function testBloquerUserSuccessfully()
     ]);
 
     // Envoyer une requête pour bloquer l'utilisateur
-    $response = $this->postJson('/api/bloquer-user/' . $user->id);
+    $response = $this->getJson('/api/bloquer-user/' . $user->id);
 
     // Vérifier que la réponse est correcte avec le message attendu
     $response->assertStatus(200)
