@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\InfoSupMedecin;
 
+use App\Models\InfoSupMedecin;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ValidationCompteMedecin;
 use App\Http\Resources\MedecinResource;
+use App\Http\Resources\PatientResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreMedecinRequest;
 use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdateMedecinRequest;
 use App\Http\Requests\UpdatePatientRequest;
-use App\Http\Resources\PatientResource;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -48,11 +49,16 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $user = User::where('email',$request->email)->first();
-        if($user == null){
+        if($user == null ){
             return response()->json([
              'message' => 'Utilisateur non trouvé'
             ],404);
+        }elseif($user->role == null){
+            return response()->json([
+                'message' => 'Utilisateur n\'a pas de role'
+               ],500);
         }
+
         if($user->role->nom == 'medecin'){
 
         if($user->infoSupMedecin->accepter === 1 && $user->is_blocked !== 0){
@@ -101,12 +107,18 @@ public function registerMedecin(StoreMedecinRequest $request){
         try {
 
         $donneeMedecinValider=$request->validated();
+$role = Role::where('nom','medecin')->first();
 
+if($role == null){
+    return response()->json(['error' => 'le role n\'existe pas'], 500);
+
+}
         if ($request->file('image') !== null && !$request->file('image')->getError()) {
             $donneeMedecinValider['image'] = $request->file('image')->store('image', 'public');
 
             $donneeMedecinValider['password']=Hash::make($donneeMedecinValider['password']);
-            $donneeMedecinValider['role_id']=2;
+
+            $donneeMedecinValider['role_id']=$role->id;
 
 
             $medecin = User::create([
@@ -137,7 +149,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
         }
         $donneeMedecinValider['password']=Hash::make($donneeMedecinValider['password']);
-        $donneeMedecinValider['role_id']=2;
+        $donneeMedecinValider['role_id']=$role->id;
         $medecin = User::create([
             'nom' => $donneeMedecinValider['nom'],
             'email' => $donneeMedecinValider['email'],
@@ -175,7 +187,13 @@ public function registerMedecin(StoreMedecinRequest $request){
 
         try {
             $donneePatientValider=$request->validated();
-            $donneePatientValider['role_id']=3;
+            $role = Role::where('nom','patient')->first();
+
+if($role == null){
+    return response()->json(['error' => 'le role n\'existe pas'], 500);
+
+}
+            $donneePatientValider['role_id']=$role->id;
             $donneePatientValider['password']=Hash::make($donneePatientValider['password']);
 
             $patient = User::create($donneePatientValider);
@@ -200,12 +218,15 @@ public function registerMedecin(StoreMedecinRequest $request){
 
         try {
             $donneePatientValider=$request->validated();
-            if($user->role->nom === 'medecin' || $user->role->nom ==='admin'){
+           if($user->role == null){
+                return response()->json([
+                    'message' => 'Utilisateur n\'a pas de role'
+                   ],500);
+            }elseif($user->role->nom === 'medecin' || $user->role->nom ==='admin'){
                 return response()->json([
                     'error' => 'non autorisé',
                     ], 403);
-            }
-            if($user->update($donneePatientValider)){
+            }elseif($user->update($donneePatientValider)){
                 return response()->json([
                 'message' => 'compte modifié avec sucess',
                     'user' => new PatientResource($user),
@@ -225,12 +246,15 @@ public function registerMedecin(StoreMedecinRequest $request){
 
         $donneeMedecinValider=$request->validated();
         $medecin = User::where('id', $id)->first();
-        if($medecin->role->nom === 'patient' || $medecin->role->nom ==='admin'){
+        if($medecin->role == null){
+            return response()->json([
+                'message' => 'Utilisateur n\'a pas de role'
+               ],500);
+        }elseif($medecin->role->nom === 'patient' || $medecin->role->nom ==='admin'){
             return response()->json([
                 'error' => 'non autorisé',
                 ], 403);
-        }
-        if ($request->file('image') !== null && !$request->file('image')->getError()) {
+        }elseif ($request->file('image') !== null && !$request->file('image')->getError()) {
             if($medecin->image){
                 Storage::disk('public')->delete($medecin->image);
 
@@ -264,7 +288,7 @@ public function registerMedecin(StoreMedecinRequest $request){
 
     $infoSupMedecin =InfoSupMedecin::where('user_id',$id)->first();
 
-        $donneeMedecinValider['role_id']=2;
+       // $donneeMedecinValider['role_id']=$medecin->id;
         $medecin->update([
             'nom' => $donneeMedecinValider['nom'],
             'telephone' => $donneeMedecinValider['telephone'],

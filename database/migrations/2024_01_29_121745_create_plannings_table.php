@@ -14,12 +14,13 @@ return new class extends Migration
     {
         Schema::create('plannings', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->time('heure_debut');
-            $table->time('heure_fin');
+            $table->enum('jour',['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche']);
+
             $table->enum('status',['disponible','pas_disponible'])->default('disponible');
+            $table->json('creneaux');
             $table->boolean('is_deleted')->default(false);
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
+
             $table->timestamps();
         });
     }

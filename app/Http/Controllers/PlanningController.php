@@ -21,8 +21,8 @@ class PlanningController extends Controller
 
         if($planning->all() == null){
             return response()->json([
-                'message' => 'aucun article pour l\'instant'
-            ], 204);
+                'message' => 'aucun planning pour l\'instant'
+            ], 200);
         }
             return response()->json([
                 'plannings' => $planning
@@ -40,30 +40,37 @@ class PlanningController extends Controller
         try {
             $donneePlanningValide = $request->validated();
         
-
-    
-            $donneePlanningValide['user_id']=Auth::user()->id;
-            
-            $planning= new Planning($donneePlanningValide);
-    
+            // Recherche de plannings similaires
+            $existingPlanning = Planning::where('user_id', Auth::user()->id)
+                ->where('jour', $donneePlanningValide['jour'])
+                ->first();
+        
+            if ($existingPlanning && $existingPlanning->is_deleted == false) {
+                // Si un planning similaire existe déjà, retourner un message d'erreur
+                return response()->json(['error' => 'Le jour pour ce planning existe déjà. Vous pouvez simplement modifier les créneaux existants.'], 409);
+            }
+        
+            // Création d'un nouveau planning
+            $planning = new Planning();
+            $planning->user_id = Auth::user()->id;
+            $planning->jour = $donneePlanningValide['jour'];
+            $planning->creneaux = json_encode($donneePlanningValide['creneaux']);
+        
             if ($planning->save()) {
                 return response()->json([
-                    "message" => "Planning a été enregistré avec succès",
-                    
+                    "message" => "Le planning a été enregistré avec succès",
                     "planning" => $planning
                 ], 201);
             } else {
                 return response()->json([
-                  
-                    "message" => "Planning n'a pas été enregistré"
+                    "message" => "Le planning n'a pas été enregistré"
                 ], 500);
             }
-           } catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             return response()->json([
-                
                 "messageErreur" => $th->getMessage(),
             ]);
-           }
+        }
     }
 
     /**
@@ -72,11 +79,22 @@ class PlanningController extends Controller
     public function show(Planning $planning)
     {
         try {
-            if($planning){
+
+
+
+
+
+
+            if($planning->is_deleted == false) {
              return response()->json([
  
                  "planning" => new PlanningResource($planning)
              ], 200);
+            }else{
+                return response()->json([
+ 
+                    "error" => 'planning non trouvé'
+                ], 404);
             }
          } catch (\Throwable $th) {
              return response()->json([
@@ -97,8 +115,12 @@ class PlanningController extends Controller
             $donneePlanningValide = $request->validated();
         
 
-    
-            $donneePlanningValide['user_id']=Auth::user()->id;
+         
+       if ($planning->jour !== $donneePlanningValide['jour'] ) {
+           return response()->json(['error' => 'vous ne pouvez pas modifier le jour'], 409);
+       }
+            
+            // $planning->creneaux=$request->creneaux;
             
     
             if ($planning->update($donneePlanningValide)) {
@@ -127,7 +149,7 @@ class PlanningController extends Controller
     public function destroy(Planning $planning)
     {
        try {
-        if($planning){
+        if($planning->is_deleted === false) {
             $planning->is_deleted = true;
            
             if($planning->update()){
@@ -136,6 +158,11 @@ class PlanningController extends Controller
                     "message" => "Planning a été supprimé avec succès"
                 ], 200);
             }
+        }else{
+            return response()->json([
+                   
+                "error" => "Planning non trouvé"
+            ], 404);
         }
        } catch (\Throwable $th) {
         return response()->json([

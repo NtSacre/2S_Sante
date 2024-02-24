@@ -122,7 +122,21 @@ public function detailMedecin()
     }
 
 }
-
+public function DetailPlanning(Planning $planning)
+{
+ 
+  
+    if($planning->is_deleted != false){
+        return response()->json([
+            'message' => 'planning non trouvé',
+        ], 200);
+    }
+     
+        return response()->json([
+            'planning' => $planning
+        ], 200);
+    
+}
         /**
      * Display a listing of the resource.
      */
@@ -133,7 +147,7 @@ public function detailMedecin()
         if($temoignages->all() == null){
             return response()->json([
                 'message' => 'aucun témoignage pour l\'instant'
-            ], 204);
+            ], 200);
         }
          
             return response()->json([

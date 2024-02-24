@@ -16,12 +16,20 @@ class PatientMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if(!Auth::check()){
+            return response()->json(['error' => 'non connecté'], 422);
+
+        }
+        if(Auth::user()->role == null){
+            return response()->json(['error' => 'role n\'existe pas'], 422);
+
+        }
        
         if(Auth::check() && Auth::user()->role->nom =='patient' ){
 
             return $next($request);
         }else{
-            return response()->json(['error' => 'non connecté'], 403);
+            return response()->json(['error' => 'non authorisé'], 403);
 
         }
     }

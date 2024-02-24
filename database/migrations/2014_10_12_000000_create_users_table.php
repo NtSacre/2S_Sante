@@ -22,8 +22,8 @@ return new class extends Migration
             $table->boolean('is_blocked')->default(false);
             $table->enum('genre',['homme','femme']);
 
-            $table->foreignIdFor(Ville::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Role::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Ville::class)->nullable()->constrained()->onDelete('set null');
+            $table->foreignIdFor(Role::class)->nullable()->constrained()->onDelete('set null');
 
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

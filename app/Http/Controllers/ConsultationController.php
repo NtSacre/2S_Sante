@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Planning;
 use App\Models\Consultation;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -87,33 +88,61 @@ class ConsultationController extends Controller
     public function store(StoreConsultationRequest $request)
     {
         $this->authorize('create', Consultation::class);
-        $donneeConsultationValider= $request->validated();
-        $donneeConsultationValider['user_id']= Auth::user()->id;
-        $planning = Planning::where('id',$donneeConsultationValider['planning_id'] )->first();
-        if($planning->is_deleted === 0){
+    
+        $donneeConsultationValider = $request->validated();
+        $donneeConsultationValider['user_id'] = Auth::user()->id;
+            // Vérifier si une consultation existe déjà pour le même jour et le même utilisateur
+    $existingConsultation = Consultation::where('user_id', $donneeConsultationValider['user_id'])
+    ->whereDate('date', $donneeConsultationValider['date'])
+    ->exists();
 
-            $consultation= new Consultation($donneeConsultationValider);
-
-            if($consultation->save()){
-                return response()->json([
-                    'message' => 'votre demande a bien été pris en compte',
-                    'consultation' => $consultation
-                ],201);
-            }else{
-                return response()->json([
-                    'message' => 'votre demande non pris en compte'
-                ],500);
-            }
-        }else{
-            return response()->json([
-                'erreur' => 'article non trouvé'
-            ],404);
-
+if ($existingConsultation) {
+return response()->json(['erreur' => 'Vous avez déjà une consultation prévue pour ce jour.'], 400);
+}
+    
+        $planning = Planning::findOrFail($donneeConsultationValider['planning_id']);
+    
+        if ($planning->is_deleted === 1) {
+            return response()->json(['erreur' => 'planning non trouvé'], 404);
         }
+   
+        if ($planning->jour == Carbon::parse($donneeConsultationValider['date'])->isoFormat('dddd')) {
+            return response()->json(['erreur' => 'La date de la consultation doit
+            correspondre au jour du planning.'], 400);
+        }
+
+
+
+        $creneaux = json_decode($planning->creneaux, true);
+        $heureRDV = $donneeConsultationValider['heure'];
         
-
-
+        // Vérifier si l'heure de rendez-vous est en dehors de toutes les plages horaires du planning
+        $heureValide = false;
+        foreach ($creneaux as $creneau) {
+            if ($heureRDV >= $creneau['heure_debut'] && $heureRDV <= $creneau['heure_fin']) {
+                $heureValide = true;
+                break;
+            }
+        }
+    
+        if (!$heureValide) {
+            return response()->json(['erreur' => 'La consultation est en dehors des heures du planning'], 400);
+        }
+    // dd($donneeConsultationValider);
+        $consultation = new Consultation($donneeConsultationValider);
+    
+        if ($consultation->save()) {
+            return response()->json([
+                'message' => 'Votre demande a bien été prise en compte.',
+                'consultation' => $consultation
+            ], 201);
+        } else {
+            return response()->json(['erreur' => 'Votre demande n\'a pas pu être prise en compte.'], 500);
+        }
     }
+    
+
+    
 
     /**
      * Display the specified resource.
@@ -140,9 +169,20 @@ class ConsultationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Consultation $consultation)
+    public function listeConsultationPatient()
     {
-        //
+        $consultation = Consultation::where('user_id',auth()->user()->id)->get();
+       
+
+        if($consultation->all() == null){
+            return response()->json([
+                'message' => 'aucune consultation pour l\'instant'
+            ], 200);
+        }
+
+        return response()->json([
+            'consultations' => $consultation
+        ], 200);
     }
 
     /**

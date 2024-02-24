@@ -5,6 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rules\Password as PasswordRule;
+
 
 class StorePatientRequest extends FormRequest
 {
@@ -25,8 +27,9 @@ class StorePatientRequest extends FormRequest
     {
         return [
             'nom' => ['required', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:8', 'confirmed'],
+            'email' => ['required', 'email', 'unique:users,email',
+            'regex:/^[A-Za-z]+[A-Za-z0-9._%+-]+@+[A-Za-z][A-Za-z0-9.-]+.[A-Za-z]{2,}$/'],
+           'password' => ['required', 'confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols()],
             'password_confirmation' => ['required'],
             'genre' => ['required', 'in:homme,femme'],
             'telephone' => ['required','regex:/^(70|75|76|77|78)[0-9]{7}$/'],
@@ -43,12 +46,17 @@ class StorePatientRequest extends FormRequest
             "email.required" => 'L\'email est requise',
             "email.unique" => 'L\'email existe déjà',
             "email.email" => 'L\'email incorrecte',
+            "email.regex" => "Format email invalid",
+
+
+            "password.required" => 'Le mot de passe est requis',
+            "password.PasswordRule" => 'Le mot de passe doit avoir au moins 8 caractères, une lettre majuscule
+            ,minuscule et un symbole',
+
             "genre.required" => 'Le genre est requis',
             "genre.in" => 'Le genre doit être soit homme, soit femme',
             "telephone.required" => 'Le numéro de telephone est requis',
             "telephone.regex" => 'Format numéro de telephone invalid (77,78,76,70,75) suivi de 7 chiffres ',
-            "password.required" => 'Le mot de passe est requis',
-            "password.min" => 'Le mot de passe doit avoir (au moins 8 caractères)',
 
             "password.confirmed" => 'Les mots de passe ne sont pas conforment',
 

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Role;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -135,5 +136,10 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->belongsTo(InfoSupPatient::class);
     }
+    public function roleIsValid()
+{
+    // Vérifier si l'utilisateur a un rôle qui existe dans la table des rôles
+    return Role::where('nom', $this->role)->exists();
+}
 
 }

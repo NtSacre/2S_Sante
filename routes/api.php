@@ -64,6 +64,10 @@ Route::middleware('medecin')->group(function(){
 
 Route::middleware('patient')->group(function () {
     Route::post('/consulter-docteur', [ConsultationController::class, 'store'])->name('consultation.store');
+    Route::get('/detail-planning/{planning}', [HomeController::class, 'DetailPlanning'])->name('home.detail-planning');
+    Route::get('/mes-consultations', [ConsultationController::class, 'listeConsultationPatient'])
+    ->name('consultation.patient');
+
     Route::post('/modifier-compte/patient/{patient}',[AuthController::class, 'modificationPatient']);
     Route::apiResource('/temoignage', TemoignageController::class);
 

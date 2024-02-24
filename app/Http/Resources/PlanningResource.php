@@ -17,9 +17,9 @@ class PlanningResource extends JsonResource
         $this->load('medecin');
         return [
             'id'=>$this->id,
-            'date'=> $this->date,
-            'heure_debut'=> $this->heure_debut,
-            'heure_fin'=> $this->heure_fin,
+            'jour'=> $this->jour,
+            'creneaux'=> $this->creneaux,
+            'status'=> $this->status,
             'medecin'=> new MedecinResource($this->medecin),
     
             'created_at'=> $this->created_at
