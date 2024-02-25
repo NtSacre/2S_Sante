@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RefusConsultationRequest;
 use App\Models\User;
 use App\Models\Planning;
 use App\Models\Consultation;
@@ -10,8 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AcceptationConsultation;
+use Illuminate\Support\Facades\Request;
 use App\Http\Requests\StoreConsultationRequest;
 use App\Http\Requests\UpdateConsultationRequest;
+use App\Mail\RefusConsultation;
 
 class ConsultationController extends Controller
 {
@@ -42,15 +45,14 @@ class ConsultationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function accepterConsultation(string $id)
+    public function accepterConsultation(Consultation $consultation)
     {
        try {
-           $consultation = Consultation::findOrFail($id);
-           $this->authorize('accepterConsultation', $consultation);
+           $this->authorize('consultationMedecin', $consultation);
 
-       if($consultation){
+      
         $consultation->status='accepter';
-        if($consultation->update()){
+        $consultation->update();
             
             $patient= User::findOrFail($consultation->user_id);
             
@@ -70,8 +72,7 @@ class ConsultationController extends Controller
 
                 ]
             ], 200);
-        }
-    }
+        
 
        } catch (\Throwable $th) {
         return response()->json([
@@ -81,6 +82,52 @@ class ConsultationController extends Controller
        }
         
     }
+
+
+
+    public function refusConsultation(RefusConsultationRequest $request)
+    {
+       try {
+        $donneeConsultationValider = $request->validated();
+
+         $consultation = Consultation::findOrFail($donneeConsultationValider['consultation_id']);
+
+           $this->authorize('consultationMedecin', $consultation);
+           $motif = $donneeConsultationValider['motif'];
+      
+        $consultation->status='refuser';
+        $consultation->update();
+            
+            $patient= User::findOrFail($consultation->user_id);
+            
+            $medecin= User::findOrFail($consultation->planning->user_id);
+            $planning= $consultation->planning;
+          
+           
+            Mail::to($patient->email)
+            ->send(new RefusConsultation($medecin, $patient,$motif));
+
+            return response()->json([
+                'message' => 'vous venez de refuser cette consulation',
+
+            ], 200);
+        
+    
+
+       } catch (\Throwable $th) {
+        return response()->json([
+            'error' => $th->getMessage(),
+            
+        ], 500);
+       }
+        
+    }
+
+
+
+
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -128,7 +175,7 @@ return response()->json(['erreur' => 'Vous avez déjà une consultation prévue 
         if (!$heureValide) {
             return response()->json(['erreur' => 'La consultation est en dehors des heures du planning'], 400);
         }
-    // dd($donneeConsultationValider);
+  
         $consultation = new Consultation($donneeConsultationValider);
     
         if ($consultation->save()) {

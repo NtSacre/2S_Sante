@@ -22,7 +22,7 @@ class ArticleController extends Controller
         if($article->all() == null){
             return response()->json([
                 'message' => 'aucun article pour l\'instant'
-            ], 204);
+            ], 200);
         }
 
         return response()->json([
@@ -68,7 +68,7 @@ class ArticleController extends Controller
         } catch (\Throwable $th) {
              return response()->json([
 
-                "messageErreur" => $th->getMessage(),
+                "erreur" => $th->getMessage(),
              ]);
         }
     }
@@ -79,12 +79,14 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         try {
-
-           if($article){
+            $this->authorize('view', $article);
+           if(!$article->is_deleted){
             return response()->json([
 
                 "article" => new ArticleResource($article)
             ], 200);
+           }else{
+            return response()->json(["error" => "Ressource non trouvée" ], 404);
            }
         } catch (\Throwable $th) {
             return response()->json([
@@ -107,7 +109,13 @@ class ArticleController extends Controller
 
             $this->authorize('update', $article);
             $donneeArticleValide = $request->validated();
+if($article->is_deleted){
+    return response()->json([
 
+        "error" => "Ressource non trouvée",
+       
+    ], 404);
+}
             $donneeArticleValide['user_id'] = Auth::user()->id;
 
 $image = $request->file('image') ? $request->file('image') : null;
@@ -129,17 +137,12 @@ $image = $request->file('image') ? $request->file('image') : null;
                     "message" => "l'article à été modifié avec succès",
                     "article" => new ArticleResource($article),
                 ], 200);
-            } else {
-                return response()->json([
-
-                    "message" => "l'article n'a pas été modifié"
-                ], 500);
             }
         } catch (\Throwable $th) {
             return response()->json([
 
-                "messageErreur" => $th->getMessage(),
-            ]);
+                "erreur" => $th->getMessage(),
+            ],500);
         }
     }
 
@@ -149,7 +152,9 @@ $image = $request->file('image') ? $request->file('image') : null;
     public function destroy(Article $article)
     {
         try {
-            if ($article) {
+            $this->authorize('update', $article);
+
+            if (!$article->is_deleted) {
                 $article->is_deleted = true;
 
                 if ($article->update()) {
@@ -158,12 +163,18 @@ $image = $request->file('image') ? $request->file('image') : null;
                         "message" => "l'article a été supprimer avec succès"
                     ], 200);
                 }
+            }else{
+                return response()->json([
+            
+                    "error" => "Ressource non trouvée",
+                   
+                ], 404);
             }
         } catch (\Throwable $th) {
             return response()->json([
 
-                "message" => $th->getMessage(),
-            ], 404);
+                "erreur" => $th->getMessage(),
+            ], 500);
         }
 
     }

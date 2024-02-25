@@ -15,15 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            // Envoyer les rappels par e-mail pour les consultations prévues dans la prochaine heure
-            Consultation::whereBetween('rappel_at', [now(), now()->addHour()])
-                ->get()
-                ->each(function ($consultation) {
-                    // Envoyer l'e-mail de rappel avec Mail::to
-                    Mail::to($consultation->user->email)->send(new RappelConsultation($consultation));
-                });
-        })->hourly();
+        $schedule->command('reminders:send')->dailyAt('08:00');
+
      }
 
     /**

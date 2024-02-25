@@ -21,8 +21,10 @@ class PlanningPolicy
      */
     public function view(User $user, Planning $planning): bool
     {
-        return true;
 
+        return $user->id == $planning->user_id;
+
+        
     }
 
     /**

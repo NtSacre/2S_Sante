@@ -22,7 +22,7 @@ class TemoignageController extends Controller
         if($temoignages->all() == null){
             return response()->json([
                 'message' => 'aucun témoignage pour l\'instant'
-            ], 204);
+            ], 200);
         }
          
             return response()->json([
@@ -41,6 +41,16 @@ class TemoignageController extends Controller
     public function store(StoreTemoignageRequest $request)
     {
         try {
+            $this->authorize('create', Temoignage::class);
+$temoignageExiste = Temoignage::where('user_id', auth()->user()->id)
+->where('temoignage', $request->temoignage)
+->first();
+if($temoignageExiste && !$temoignageExiste->is_deleted){
+    return response()->json([
+        'erreur' => 'temoignage simulaire existe déjà',
+      
+    ], 409);
+}
             $donneTemoignageValider=$request->validated();
             $donneTemoignageValider['user_id'] = auth()->user()->id;
             $temoignage=Temoignage::create( $donneTemoignageValider);
@@ -62,19 +72,28 @@ class TemoignageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Temoignage $temoignage)
     {
         try {
-            $temoignage = Temoignage::findOrFail($id);
+            $this->authorize('view', $temoignage);
+
+           if(!$temoignage->is_deleted){
             return response()->json([
                 
                 'temoignage' => $temoignage,
             ], 200);
+           }else{
+            return response()->json([
+                
+                'erreur' => 'Ressource non trouvée',
+            ], 404);
+           }
+
         } catch (\Throwable $th) {
             return response()->json([
                 
                 'erreur' => $th->getMessage(),
-            ]);
+            ], 500);
         }
     }
 
@@ -83,10 +102,18 @@ class TemoignageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTemoignageRequest $request, string $id)
+    public function update(UpdateTemoignageRequest $request, Temoignage $temoignage)
     {
         try {
-           $temoignage = Temoignage::findOrFail($id);
+
+            $this->authorize('update', $temoignage);
+
+            if($temoignage->is_deleted){
+                return response()->json([ "error" => 'Ressource non trouvée'
+            ], 404);
+            }
+            
+
            $donneTemoignageValider= $request->validated();
           $temoignage->update($donneTemoignageValider);
            return response()->json([
@@ -96,21 +123,28 @@ class TemoignageController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
             'erreur' => $th->getMessage(),
-        ]);
+        ], 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Temoignage $temoignage)
     {
         try {
-            $temoignage = Temoignage::findOrFail($id);
-            $temoignage->is_deleted = true;
-            return response()->json([
-                'message' => 'témoignage supprimé avec succès',
-            ],204);
+            if(!$temoignage->is_deleted){
+                $temoignage->is_deleted = true;
+                $temoignage->update();
+                return response()->json([
+                    'message' => 'témoignage supprimé avec succès',
+                ],200);
+            }else{
+                return response()->json([
+                    'erreur' => 'Ressource non trouvée',
+                ],404);
+            }
+
         } catch (\Throwable $th) {
             return response()->json([
                 'erreur' => $th->getMessage(),

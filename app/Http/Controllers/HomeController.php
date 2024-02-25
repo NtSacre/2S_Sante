@@ -49,17 +49,25 @@ class HomeController extends Controller
         
     }
 
-    public function voirArticle(string $id){
+    public function voirArticle(Article $article){
         try {
-           $article = Article::findOrFail($id);
           
+          
+            if($article->is_deleted){
+                return response()->json([
             
-
-            return response()->json([
+                    "error" => "Ressource non trouvée",
+                   
+                ], 404);
+            }else{
+                return response()->json([
                 
-                "article" => new ArticleResource($article),
-    
-            ], 200);
+                    "article" => new ArticleResource($article),
+        
+                ], 200);
+            }
+
+
         
 
 
@@ -68,7 +76,7 @@ class HomeController extends Controller
                 
                 "erreur" => $th->getMessage(),
     
-            ], 200);
+            ], 500);
         }
  
     }
@@ -76,6 +84,15 @@ class HomeController extends Controller
     public function planningMedecin(User $medecin)
     {
         try {
+
+            if($medecin->role->nom != 'medecin'){
+                return response()->json([
+    
+                    "erreur" => 'Utilisateur non trouvée',
+            
+            
+                ], 200);
+            }
             $plannings = Planning::where('is_deleted', 0)
             ->where('user_id', $medecin->id)
             ->get();
@@ -86,7 +103,7 @@ class HomeController extends Controller
             "message" => 'Aucun planning publié',
     
     
-        ], 204);
+        ], 200);
     }
     
     
@@ -117,7 +134,7 @@ public function detailMedecin()
         
         return response()->json(['medecins' => MedecinResource::collection($medecin)], 200);
     }else{
-        return response()->json(['message' => "aucun medecin trouvé"], 200);
+        return response()->json(['erreur' => "aucun medecin trouvé"], 200);
 
     }
 

@@ -22,12 +22,15 @@ class ConsultationPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function accepterConsultation(User $user, Consultation $consultation): bool
+    public function consultationMedecin(User $user, Consultation $consultation): bool
     {
-        $planning = Planning::where('id', $consultation->planning->id)->first();
+        $planning = Planning::where('id', $consultation->planning_id)->first();
        
         return $user->role->nom === 'medecin' && $user->id == $planning->user_id;
     }
+
+
+
 
 
 }

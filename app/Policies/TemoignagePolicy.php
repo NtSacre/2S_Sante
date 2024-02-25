@@ -13,7 +13,7 @@ class TemoignagePolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class TemoignagePolicy
      */
     public function view(User $user, Temoignage $temoignage): bool
     {
-        //
+        return $user->id == $temoignage->user_id;
     }
 
     /**
@@ -29,7 +29,8 @@ class TemoignagePolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->is_blocked === 0 && $user->id !== null;
+
     }
 
     /**
@@ -37,7 +38,7 @@ class TemoignagePolicy
      */
     public function update(User $user, Temoignage $temoignage): bool
     {
-        //
+        return $user->id == $temoignage->user_id;
     }
 
     /**
@@ -45,22 +46,22 @@ class TemoignagePolicy
      */
     public function delete(User $user, Temoignage $temoignage): bool
     {
-        //
+        return $user->id == $temoignage->user_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Temoignage $temoignage): bool
-    {
-        //
-    }
+    // public function restore(User $user, Temoignage $temoignage): bool
+    // {
+    //     //
+    // }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Temoignage $temoignage): bool
-    {
-        //
-    }
+    // /**
+    //  * Determine whether the user can permanently delete the model.
+    //  */
+    // public function forceDelete(User $user, Temoignage $temoignage): bool
+    // {
+    //     //
+    // }
 }

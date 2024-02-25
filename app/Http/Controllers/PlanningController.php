@@ -38,6 +38,8 @@ class PlanningController extends Controller
     public function store(StorePlanningRequest $request)
     {
         try {
+            $this->authorize('create', Planning::class);
+
             $donneePlanningValide = $request->validated();
         
             // Recherche de plannings similaires
@@ -45,9 +47,9 @@ class PlanningController extends Controller
                 ->where('jour', $donneePlanningValide['jour'])
                 ->first();
         
-            if ($existingPlanning && $existingPlanning->is_deleted == false) {
+            if ($existingPlanning && !$existingPlanning->is_deleted) {
                 // Si un planning similaire existe déjà, retourner un message d'erreur
-                return response()->json(['error' => 'Le jour pour ce planning existe déjà. Vous pouvez simplement modifier les créneaux existants.'], 409);
+                return response()->json(['error' => "Le jour pour ce planning existe déjà. Vous pouvez simplement modifier les créneaux existants."], 409);
             }
         
             // Création d'un nouveau planning
@@ -69,7 +71,7 @@ class PlanningController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 "messageErreur" => $th->getMessage(),
-            ]);
+            ],500);
         }
     }
 
@@ -79,13 +81,9 @@ class PlanningController extends Controller
     public function show(Planning $planning)
     {
         try {
+            $this->authorize('view', $planning);
 
-
-
-
-
-
-            if($planning->is_deleted == false) {
+            if(!$planning->is_deleted) {
              return response()->json([
  
                  "planning" => new PlanningResource($planning)
@@ -93,7 +91,7 @@ class PlanningController extends Controller
             }else{
                 return response()->json([
  
-                    "error" => 'planning non trouvé'
+                    "error" => 'Ressource non trouvée'
                 ], 404);
             }
          } catch (\Throwable $th) {
@@ -112,15 +110,18 @@ class PlanningController extends Controller
     public function update(UpdatePlanningRequest $request, Planning $planning)
     {
         try {
+            $this->authorize('update', $planning);
+            if ($planning->is_deleted ) {
+                return response()->json([ "error" => 'Ressource non trouvée'
+            ], 404);
+            }
             $donneePlanningValide = $request->validated();
-        
-
          
        if ($planning->jour !== $donneePlanningValide['jour'] ) {
            return response()->json(['error' => 'vous ne pouvez pas modifier le jour'], 409);
        }
             
-            // $planning->creneaux=$request->creneaux;
+           
             
     
             if ($planning->update($donneePlanningValide)) {
@@ -129,17 +130,12 @@ class PlanningController extends Controller
                     
                     "planning" => $planning
                 ], 200);
-            } else {
-                return response()->json([
-                  
-                    "message" => "Planning n'a pas été modifié"
-                ], 500);
             }
            } catch (\Throwable $th) {
             return response()->json([
                 
-                "messageErreur" => $th->getMessage(),
-            ]);
+                "erreur" => $th->getMessage(),
+            ], 500);
            }
     }
 
@@ -149,7 +145,9 @@ class PlanningController extends Controller
     public function destroy(Planning $planning)
     {
        try {
-        if($planning->is_deleted === false) {
+        $this->authorize('delete', $planning);
+
+        if(!$planning->is_deleted) {
             $planning->is_deleted = true;
            
             if($planning->update()){
@@ -161,13 +159,13 @@ class PlanningController extends Controller
         }else{
             return response()->json([
                    
-                "error" => "Planning non trouvé"
+                "error" => "Ressource non trouvée"
             ], 404);
         }
        } catch (\Throwable $th) {
         return response()->json([
             "erreur" => $th->getMessage()
-        ]);
+        ],500);
        }
     }
 }

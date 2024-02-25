@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Planning::class)->constrained()->onDelete('cascade');
-            $table->enum('etat',[ 'effectuer', 'non_effectuer'])->nullable();
+            $table->enum('etat',[ 'effectuer', 'non_effectuer'])->default('non_effectuer');
             $table->enum('motif',['Consultation_generale',
             'Prescription_de_médicaments_renouvelables',
             'Suivi_de_traitement',

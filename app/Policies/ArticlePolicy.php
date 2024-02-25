@@ -21,7 +21,8 @@ class ArticlePolicy
      */
     public function view(User $user, Article $article): bool
     {
-        return true;
+        return $user->id == $article->user_id;
+
     }
 
     /**

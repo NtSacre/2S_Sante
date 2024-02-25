@@ -56,6 +56,10 @@ Route::middleware('medecin')->group(function(){
     Route::get('/accepter-consultation/{consultation}',
     [ConsultationController::class, 'accepterConsultation'])
     ->name('consultation.accepterConsultation');
+
+    Route::post('/refuser-consultation',
+    [ConsultationController::class, 'refusConsultation'])
+    ->name('consultation.refuserConsultation');
     Route::get('/contacter-patient/{patient}', [ConsultationController::class, 'contacterPatient'])
     ->name('contacterPatient');
     Route::post('/modifier-compte/medecin/{medecin}',

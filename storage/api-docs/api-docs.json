@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "API 2S Santé",
-        "description": "documentation de l'api 2S Santé, une application qui sauve des vies",
+        "title": "2S Santé",
+        "description": "une apllication qui sauve des vies",
         "version": "1.0.0"
     },
     "security": [
@@ -57,7 +57,7 @@
                     }
                 },
                 "tags": [
-                    "Page d'acceuille"
+                    "Route libres"
                 ],
                 "parameters": [
                     {
@@ -102,7 +102,7 @@
                     }
                 },
                 "tags": [
-                    "Page d'acceuille"
+                    "Route libres"
                 ],
                 "parameters": [
                     {
@@ -152,7 +152,7 @@
                     }
                 },
                 "tags": [
-                    "Page d'acceuille"
+                    "Route libres"
                 ],
                 "parameters": [
                     {
@@ -202,7 +202,7 @@
                     }
                 },
                 "tags": [
-                    "Page d'acceuille"
+                    "Route libres"
                 ],
                 "parameters": [
                     {
@@ -247,7 +247,7 @@
                     }
                 },
                 "tags": [
-                    "Page d'acceuille"
+                    "Route libres"
                 ],
                 "parameters": [
                     {
@@ -321,6 +321,9 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
+                                    "date": {
+                                        "type": "string"
+                                    },
                                     "planning_id": {
                                         "type": "integer"
                                     },
@@ -336,8 +339,9 @@
                                 }
                             },
                             "example": {
+                                "date": "2024-02-27",
                                 "planning_id": 1,
-                                "heure": "13:20:00",
+                                "heure": "16:59",
                                 "motif": "Consultation_generale",
                                 "type": "presentiel"
                             }
@@ -396,7 +400,112 @@
                 ]
             }
         },
-        "/api/accepter-consultation/{consultation}": {
+        "/api/mes-consultations": {
+            "get": {
+                "summary": "liste de consultation patient",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion consultation"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/detail-planning/{planning}": {
+            "get": {
+                "summary": "Detail planning",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion consultation"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "planning",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/accepter-consultation/1": {
             "get": {
                 "summary": "Accepter une  consultation",
                 "description": "",
@@ -451,6 +560,91 @@
                 ]
             }
         },
+        "/api/refuser-consultation": {
+            "post": {
+                "summary": "Refuser une  consultation",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion consultation"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "consultation_id": {
+                                        "type": "integer"
+                                    },
+                                    "motif": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "consultation_id": 1,
+                                "motif": "je suis occupé"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/contacter-patient/{patient}": {
             "get": {
                 "summary": "Contacter patient",
@@ -490,7 +684,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "patient",
+                        "name": "",
                         "type": "string"
                     },
                     {
@@ -630,8 +824,8 @@
                                 }
                             },
                             "example": {
-                                "titre": "le toux",
-                                "description": "la toux une mauvaise maladie",
+                                "titre": "le paludisme",
+                                "description": "le paludisme vraiment une mauvaise maladie",
                                 "image": {
                                     "type": "string",
                                     "format": "binary"
@@ -643,6 +837,59 @@
             }
         },
         "/api/article/{article}": {
+            "get": {
+                "summary": "voir article",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion Arcticle"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "article",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            },
             "delete": {
                 "summary": "supprimer article",
                 "description": "",
@@ -676,59 +923,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Gestion Arcticle"
-                ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "article",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ]
-            },
-            "get": {
-                "summary": "voir article",
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -840,7 +1034,7 @@
                                 }
                             },
                             "example": {
-                                "titre": "la scene",
+                                "titre": "la tuberculosee",
                                 "description": "la tuberculose  c'est pas du tou bon  ",
                                 "image": {
                                     "type": "string",
@@ -959,25 +1153,46 @@
                 ],
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "date": {
+                                    "jour": {
                                         "type": "string"
                                     },
-                                    "heure_debut": {
-                                        "type": "string"
-                                    },
-                                    "heure_fin": {
-                                        "type": "string"
+                                    "creneaux": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "heure_debut": {
+                                                    "type": "string",
+                                                    "format": "time",
+                                                    "description": "Heure de début du créneau"
+                                                },
+                                                "heure_fin": {
+                                                    "type": "string",
+                                                    "format": "time",
+                                                    "description": "Heure de fin du créneau"
+                                                }
+                                            },
+                                            "required": ["heure_debut", "heure_fin"]
+                                        }
                                     }
                                 }
                             },
                             "example": {
-                                "date": "2023-05-06",
-                                "heure_debut": "14:30:00",
-                                "heure_fin": "17:30:00"
+                                "jour": "lundi",
+                                "creneaux": [
+                                    {
+                                        "heure_debut": "14:00",
+                                        "heure_fin": "15:00"
+                                    },
+                                    {
+                                        "heure_debut": "15:30",
+                                        "heure_fin": "19:00"
+                                    }
+                                ]
                             }
                         }
                     }
@@ -985,6 +1200,59 @@
             }
         },
         "/api/planning/{planning}": {
+            "get": {
+                "summary": "voir planning",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion Planning"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "planning",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            },
             "delete": {
                 "summary": "supprimer  planning",
                 "description": "",
@@ -1018,59 +1286,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Gestion Planning"
-                ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "planning",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ]
-            },
-            "get": {
-                "summary": "voir planning",
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -1165,25 +1380,170 @@
                 ],
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "type": "object",
                                 "properties": {
                                     "jour": {
                                         "type": "string"
                                     },
-                                    "heure_debut": {
+                                    "creneaux": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "heure_debut": {
+                                                    "type": "string",
+                                                    "format": "time",
+                                                    "description": "Heure de début du créneau"
+                                                },
+                                                "heure_fin": {
+                                                    "type": "string",
+                                                    "format": "time",
+                                                    "description": "Heure de fin du créneau"
+                                                }
+                                            },
+                                            "required": ["heure_debut", "heure_fin"]
+                                        }
+                                    }
+                                }
+                            },
+                            "example": {
+                                "jour": "lundi",
+                                "creneaux": [
+                                    {
+                                        "heure_debut": "08:01",
+                                        "heure_fin": "09:00"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/role": {
+            "get": {
+                "summary": "listes roles",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion Role"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            },
+            "post": {
+                "summary": "Enregistrer role",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion Role"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
                                         "type": "string"
                                     },
-                                    "heure_fin": {
+                                    "description": {
                                         "type": "string"
                                     }
                                 }
                             },
                             "example": {
-                                "jour": "Mercredi",
-                                "heure_debut": "14:45:00",
-                                "heure_fin": "17:10:00"
+                                "nom": "SuperAdmin",
+                                "description": "il a de super pouvoir"
                             }
                         }
                     }
@@ -1191,6 +1551,59 @@
             }
         },
         "/api/role/{role}": {
+            "get": {
+                "summary": "voir  role",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion Role"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "role",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            },
             "put": {
                 "summary": "modifier role",
                 "description": "",
@@ -1326,9 +1739,11 @@
                         "type": "string"
                     }
                 ]
-            },
+            }
+        },
+        "/api/ville": {
             "get": {
-                "summary": "voir  role",
+                "summary": "liste des villes",
                 "description": "",
                 "responses": {
                     "200": {
@@ -1360,14 +1775,9 @@
                     }
                 },
                 "tags": [
-                    "Gestion Role"
+                    "Gestion Ville"
                 ],
                 "parameters": [
-                    {
-                        "in": "path",
-                        "name": "role",
-                        "type": "string"
-                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -1379,11 +1789,9 @@
                         "type": "string"
                     }
                 ]
-            }
-        },
-        "/api/role": {
+            },
             "post": {
-                "summary": "Enregistrer role",
+                "summary": "Enregistrer une ville",
                 "description": "",
                 "responses": {
                     "201": {
@@ -1424,7 +1832,7 @@
                     }
                 },
                 "tags": [
-                    "Gestion Role"
+                    "Gestion Ville"
                 ],
                 "parameters": [
                     {
@@ -1446,22 +1854,20 @@
                                 "properties": {
                                     "nom": {
                                         "type": "string"
-                                    },
-                                    "description": {
-                                        "type": "string"
                                     }
                                 }
                             },
                             "example": {
-                                "nom": "SuperAdmin",
-                                "description": "il a de super pouvoir"
+                                "nom": "Mboure"
                             }
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/ville/{ville}": {
             "get": {
-                "summary": "listes roles",
+                "summary": "voir une ville",
                 "description": "",
                 "responses": {
                     "200": {
@@ -1493,9 +1899,14 @@
                     }
                 },
                 "tags": [
-                    "Gestion Role"
+                    "Gestion Ville"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "ville",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -1507,9 +1918,7 @@
                         "type": "string"
                     }
                 ]
-            }
-        },
-        "/api/ville/{ville}": {
+            },
             "put": {
                 "summary": "modifier  ville",
                 "description": "",
@@ -1641,9 +2050,11 @@
                         "type": "string"
                     }
                 ]
-            },
+            }
+        },
+        "/api/secteur-activite": {
             "get": {
-                "summary": "voir une ville",
+                "summary": "liste secteurs activités",
                 "description": "",
                 "responses": {
                     "200": {
@@ -1675,14 +2086,9 @@
                     }
                 },
                 "tags": [
-                    "Gestion Ville"
+                    "Gestion Secteur Activité"
                 ],
                 "parameters": [
-                    {
-                        "in": "path",
-                        "name": "ville",
-                        "type": "string"
-                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -1694,11 +2100,9 @@
                         "type": "string"
                     }
                 ]
-            }
-        },
-        "/api/ville": {
+            },
             "post": {
-                "summary": "Enregistrer une ville",
+                "summary": "Enregistrer secteur d'activité",
                 "description": "",
                 "responses": {
                     "201": {
@@ -1739,7 +2143,7 @@
                     }
                 },
                 "tags": [
-                    "Gestion Ville"
+                    "Gestion Secteur Activité"
                 ],
                 "parameters": [
                     {
@@ -1765,14 +2169,16 @@
                                 }
                             },
                             "example": {
-                                "nom": "Mbour"
+                                "nom": "Chirurgien"
                             }
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/secteur-activite/{secteur-activite}": {
             "get": {
-                "summary": "liste des villes",
+                "summary": "voir secteur d'activité",
                 "description": "",
                 "responses": {
                     "200": {
@@ -1804,9 +2210,14 @@
                     }
                 },
                 "tags": [
-                    "Gestion Ville"
+                    "Gestion Secteur Activité"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "secteur-activite",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -1818,9 +2229,7 @@
                         "type": "string"
                     }
                 ]
-            }
-        },
-        "/api/secteur-activite/{secteur-activite}": {
+            },
             "put": {
                 "summary": "modifier  secteur d'activité",
                 "description": "",
@@ -1952,9 +2361,11 @@
                         "type": "string"
                     }
                 ]
-            },
+            }
+        },
+        "/api/temoignage": {
             "get": {
-                "summary": "voir secteur d'activité",
+                "summary": "listes temoignages",
                 "description": "",
                 "responses": {
                     "200": {
@@ -1986,14 +2397,9 @@
                     }
                 },
                 "tags": [
-                    "Gestion Secteur Activité"
+                    "Gestion de temoignage"
                 ],
                 "parameters": [
-                    {
-                        "in": "path",
-                        "name": "secteur-activite",
-                        "type": "string"
-                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -2005,11 +2411,9 @@
                         "type": "string"
                     }
                 ]
-            }
-        },
-        "/api/secteur-activite": {
+            },
             "post": {
-                "summary": "Enregistrer secteur d'activité",
+                "summary": "Enregistrer  temoignage",
                 "description": "",
                 "responses": {
                     "201": {
@@ -2050,7 +2454,7 @@
                     }
                 },
                 "tags": [
-                    "Gestion Secteur Activité"
+                    "Gestion de temoignage"
                 ],
                 "parameters": [
                     {
@@ -2070,20 +2474,22 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "nom": {
+                                    "temoignage": {
                                         "type": "string"
                                     }
                                 }
                             },
                             "example": {
-                                "nom": "Chirurgien"
+                                "temoignage": "hum 2S santé"
                             }
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/temoignage/2": {
             "get": {
-                "summary": "liste secteurs activités",
+                "summary": "voir  temoignage",
                 "description": "",
                 "responses": {
                     "200": {
@@ -2115,9 +2521,14 @@
                     }
                 },
                 "tags": [
-                    "Gestion Secteur Activité"
+                    "Gestion de temoignage"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "temoignage",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -2131,7 +2542,7 @@
                 ]
             }
         },
-        "": {
+        "/api/temoignage/1": {
             "put": {
                 "summary": "modifier temoignage",
                 "description": "",
@@ -2263,183 +2674,6 @@
                         "type": "string"
                     }
                 ]
-            },
-            "get": {
-                "summary": "voir  temoignage",
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Gestion de temoignage"
-                ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "temoignage",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ]
-            }
-        },
-        "/api/temoignage": {
-            "post": {
-                "summary": "Enregistrer  temoignage",
-                "description": "",
-                "responses": {
-                    "201": {
-                        "description": "Created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Unauthorize",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Gestion de temoignage"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "temoignage": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "example": {
-                                "temoignage": "j'ai trop aimé"
-                            }
-                        }
-                    }
-                }
-            },
-            "get": {
-                "summary": "listes temoignages",
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Gestion de temoignage"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ]
             }
         },
         "/api/motpasseoublie": {
@@ -2513,7 +2747,7 @@
                 }
             }
         },
-        "/api/valider-compte-medecin/{medecin}": {
+        "/api/valider-compte-medecin/2": {
             "post": {
                 "summary": "Valider medecin",
                 "description": "",
@@ -2782,7 +3016,7 @@
                 ]
             }
         },
-        "/api/debloquer-user/{user}": {
+        "/api/debloquer-user/2": {
             "get": {
                 "summary": "débloquer utilisateur",
                 "description": "",
@@ -2934,19 +3168,19 @@
                                 }
                             },
                             "example": {
-                                "nom": "Ntandou sacre",
-                                "email": "sacrentandou2.0@gmail.com",
-                                "password": "12345678",
+                                "nom": "Rober Kiosaki",
+                                "email": "essai@gmail.com",
+                                "password": "Lolita1.",
                                 "telephone": "785175632",
-                                "ville_id": "1",
-                                "hopital_id": "1",
-                                "secteur_activite_id": "1",
+                                "ville_id": "2",
+                                "hopital_id": "2",
+                                "secteur_activite_id": "2",
                                 "genre": "homme",
                                 "image": {
                                     "type": "string",
                                     "format": "binary"
                                 },
-                                "password_confirmation": "12345678"
+                                "password_confirmation": "Lolita1."
                             }
                         }
                     }
@@ -3150,11 +3384,11 @@
                             "example": {
                                 "nom": "Ntandou Ray",
                                 "email": "margenintandou@gmail.com",
-                                "password": "12345678",
+                                "password": "Password123.",
                                 "telephone": "778524560",
                                 "ville_id": 1,
                                 "genre": "homme",
-                                "password_confirmation": "12345678"
+                                "password_confirmation": "Password123."
                             }
                         }
                     }
@@ -3440,7 +3674,7 @@
                             },
                             "example": {
                                 "email": "margenintandou@gmail.com",
-                                "password": "12345678"
+                                "password": "Password123."
                             }
                         }
                     }

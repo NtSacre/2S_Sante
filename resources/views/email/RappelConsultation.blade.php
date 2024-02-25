@@ -47,19 +47,10 @@
 
     <div class="container">
        
-        <p>Bonjour {{ $consultation->patient->name }},</p>
+        <p>Bonjour {{ $consultation->user->nom }},</p>
 
-        <p>Nous voulions vous rappeler de votre consultation prévue dans les prochaines 24 heures.</p>
-
-        <strong>Détails de la Consultation:</strong>
-        <ul>
-            <li><strong>Date et Heure:</strong> {{ $consultation->date_heure }}</li>
-            <li><strong>Lieu:</strong> {{ $consultation->planning->lieu }}</li>
-        </ul>
-
-        <a class="button" href="{{ url('/consultation/' . $consultation->id) }}">Voir la Consultation</a>
-
-        <p>Merci de choisir notre service.</p>
+        <p>Ceci est un rappel pour votre consultation prévue pour le {{ $consultation->date }} à {{ $consultation->heure }}.</p>
+    <p>Merci de vous connecter à l'heure.</p>
 
         <p>Cordialement,<br>2S Santé</p>
     </div>

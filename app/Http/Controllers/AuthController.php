@@ -333,12 +333,19 @@ if($role == null){
     public function bloquerUser(User $user){
 
         try {
-            $user->is_blocked = true;
-            if($user->update()){
-             return response()->json([
-                 'message' => 'utilisateur bloqué avec succès'
-             ],200);
+            if(!$user->is_blocked){
+                $user->is_blocked = true;
+                $user->update();
+                 return response()->json([
+                     'message' => 'utilisateur bloqué avec succès'
+                 ],200);
+                
+            }else{
+                return response()->json([
+                    'erreur' => 'utilisateur déjà bloqué'
+                ],409);
             }
+
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -359,16 +366,24 @@ if($role == null){
     public function debloquerUser(User  $user){
 
         try {
-            $user->is_blocked = false;
+            if($user->is_blocked){
+                $user->is_blocked = false;
 
+               $user->update();
 
-            if($user->update()){
-
-             return response()->json([
-                 'message' => 'utilisateur débloqué avec succès'
-             ],200);
-
+                    return response()->json([
+                        'message' => 'utilisateur débloqué avec succès'
+                    ],200);
+       
+                   
+            }else{
+                return response()->json([
+                    'erreur' => 'utilisateur déjà débloqué'
+                ],409);
             }
+
+
+
 
         } catch (\Throwable $th) {
            return response()->json([
