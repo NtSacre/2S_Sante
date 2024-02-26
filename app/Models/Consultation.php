@@ -28,12 +28,12 @@ class Consultation extends Model
     }
 
     
-    protected static function boot()
-{
-    parent::boot();
+//     protected static function boot()
+// {
+//     parent::boot();
 
-    static::creating(function ($consultation) {
-        $consultation->rappel_at = now()->subHours(24);
-    });
-}
+//     static::creating(function ($consultation) {
+//         $consultation->rappel_at = now()->subHours(24);
+//     });
+// }
 }

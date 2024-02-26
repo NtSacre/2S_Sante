@@ -28,7 +28,12 @@ class ConsultationController extends Controller
         })
         ->with(['user:id,nom'])
         ->get();
- 
+
+
+
+
+
+
      if ($consultations->isNotEmpty()) {
          return response()->json([
              'message' => 'Liste de demandes de consultation',
@@ -222,7 +227,7 @@ return response()->json(['erreur' => 'Vous avez déjà une consultation prévue 
         if (!$heureValide) {
             return response()->json(['erreur' => 'La consultation est en dehors des heures du planning'], 400);
         }
-  
+        $donneeConsultationValider['rappel_at']=$donneeConsultationValider['date'];
         $consultation = new Consultation($donneeConsultationValider);
     
         if ($consultation->save()) {
