@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "2S Santé",
-        "description": "une apllication qui sauve des vies",
+        "title": "Your API Title",
+        "description": "Your API Description",
         "version": "1.0.0"
     },
     "security": [
@@ -505,7 +505,7 @@
                 ]
             }
         },
-        "/api/accepter-consultation/1": {
+        "/api/accepter-consultation/{consultation}": {
             "get": {
                 "summary": "Accepter une  consultation",
                 "description": "",
@@ -560,13 +560,13 @@
                 ]
             }
         },
-        "/api/refuser-consultation": {
-            "post": {
+        "/api/refuser-consultation/{consultation}": {
+            "get": {
                 "summary": "Refuser une  consultation",
                 "description": "",
                 "responses": {
-                    "201": {
-                        "description": "Created successfully",
+                    "200": {
+                        "description": "OK",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -574,8 +574,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -583,17 +583,8 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Unauthorize",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -608,7 +599,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "",
+                        "name": "consultation",
                         "type": "string"
                     },
                     {
@@ -621,28 +612,63 @@
                         "name": "Authorization",
                         "type": "string"
                     }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "consultation_id": {
-                                        "type": "integer"
-                                    },
-                                    "motif": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "example": {
-                                "consultation_id": 1,
-                                "motif": "je suis occupé"
+                ]
+
+            }
+        },
+        "/api/effectuer-consultation/{consultation}": {
+            "get": {
+                "summary": "Effectuer une  consultation",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     }
-                }
+                },
+                "tags": [
+                    "Gestion consultation"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "consultation",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
             }
         },
         "/api/contacter-patient/{patient}": {
@@ -2487,7 +2513,7 @@
                 }
             }
         },
-        "/api/temoignage/2": {
+        "/api/temoignage/{temoignage}": {
             "get": {
                 "summary": "voir  temoignage",
                 "description": "",
@@ -2540,9 +2566,7 @@
                         "type": "string"
                     }
                 ]
-            }
-        },
-        "/api/temoignage/1": {
+            },
             "put": {
                 "summary": "modifier temoignage",
                 "description": "",
@@ -2747,7 +2771,7 @@
                 }
             }
         },
-        "/api/valider-compte-medecin/2": {
+        "/api/valider-compte-medecin/{medecin}": {
             "post": {
                 "summary": "Valider medecin",
                 "description": "",
@@ -3016,7 +3040,7 @@
                 ]
             }
         },
-        "/api/debloquer-user/2": {
+        "/api/debloquer-user/{user}": {
             "get": {
                 "summary": "débloquer utilisateur",
                 "description": "",

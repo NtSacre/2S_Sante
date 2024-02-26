@@ -35,6 +35,6 @@ informations nécessaires pour une expérience fluide.</p>
 
 <p>Cordialement,</p>
 
-<p>L'équipe de S2S Santé</p>
+<p>L'équipe de 2S Santé</p>
 </body>
 </html>

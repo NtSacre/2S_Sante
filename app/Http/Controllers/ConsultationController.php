@@ -50,7 +50,7 @@ class ConsultationController extends Controller
        try {
            $this->authorize('consultationMedecin', $consultation);
 
-      
+      if($consultation->status != 'accepter' && $consultation->etat != 'effectuer'){
         $consultation->status='accepter';
         $consultation->update();
             
@@ -72,6 +72,13 @@ class ConsultationController extends Controller
 
                 ]
             ], 200);
+      }else{
+        return response()->json([
+            'erreur' => 'consultation déjà acceptée ou effectuée',
+
+        ], 409);
+      }
+
         
 
        } catch (\Throwable $th) {
@@ -85,32 +92,36 @@ class ConsultationController extends Controller
 
 
 
-    public function refusConsultation(RefusConsultationRequest $request)
+    public function refusConsultation(Consultation $consultation)
     {
        try {
-        $donneeConsultationValider = $request->validated();
 
-         $consultation = Consultation::findOrFail($donneeConsultationValider['consultation_id']);
 
            $this->authorize('consultationMedecin', $consultation);
-           $motif = $donneeConsultationValider['motif'];
-      
+      if($consultation->status != 'refuser' && $consultation->etat != 'effectuer'){
         $consultation->status='refuser';
         $consultation->update();
             
             $patient= User::findOrFail($consultation->user_id);
             
-            $medecin= User::findOrFail($consultation->planning->user_id);
-            $planning= $consultation->planning;
           
            
             Mail::to($patient->email)
-            ->send(new RefusConsultation($medecin, $patient,$motif));
+            ->send(new RefusConsultation($consultation, $patient));
 
             return response()->json([
                 'message' => 'vous venez de refuser cette consulation',
 
             ], 200);
+      }else{
+       
+
+            return response()->json([
+                'erreur' => 'consultation déjà refusée ou effectuée',
+
+            ], 409);
+      }
+       
         
     
 
@@ -124,7 +135,45 @@ class ConsultationController extends Controller
     }
 
 
+    public function effectuerConsultation(Consultation $consultation)
+    {
+       try {
 
+
+           $this->authorize('consultationMedecin', $consultation);
+      if($consultation->etat != 'effectuer'){
+
+        $consultation->etat='effectuer';
+        $consultation->update();
+            
+
+
+            return response()->json([
+                'message' => 'Consulation marquer comme effectué',
+
+            ], 200);
+      }else{
+     
+            
+
+
+            return response()->json([
+                'erreur' => 'Consulation déjà marqué comme effectué',
+
+            ], 409);
+      }
+
+        
+    
+
+       } catch (\Throwable $th) {
+        return response()->json([
+            'error' => $th->getMessage(),
+            
+        ], 500);
+       }
+        
+    }
 
 
 
@@ -152,10 +201,8 @@ return response()->json(['erreur' => 'Vous avez déjà une consultation prévue 
         if ($planning->is_deleted === 1) {
             return response()->json(['erreur' => 'planning non trouvé'], 404);
         }
-   
-        if ($planning->jour == Carbon::parse($donneeConsultationValider['date'])->isoFormat('dddd')) {
-            return response()->json(['erreur' => 'La date de la consultation doit
-            correspondre au jour du planning.'], 400);
+        if ($planning->jour != Carbon::parse($donneeConsultationValider['date'])->isoFormat('dddd')) {
+            return response()->json(['erreur' => 'La date de la consultation doit correspondre au jour du planning.'], 400);
         }
 
 
