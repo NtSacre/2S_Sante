@@ -1281,7 +1281,7 @@
             },
             "delete": {
                 "summary": "supprimer  planning",
-                "description": "",
+                "description": "Supprimer planning",
                 "responses": {
                     "204": {
                         "description": "Deleted successfully",

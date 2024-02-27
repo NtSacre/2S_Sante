@@ -18,7 +18,7 @@ class PlanningResource extends JsonResource
         return [
             'id'=>$this->id,
             'jour'=> $this->jour,
-            'creneaux'=> $this->creneaux,
+            'creneaux'=> json_decode($this->creneaux, true),
             'status'=> $this->status,
             'medecin'=> new MedecinResource($this->medecin),
     

@@ -62,7 +62,6 @@ Route::middleware('medecin')->group(function(){
     [ConsultationController::class, 'effectuerConsultation'])
     ->name('consultation.effecuterConsultation');
 
-
     Route::get('/refuser-consultation/{consultation}',
     [ConsultationController::class, 'refusConsultation'])
     ->name('consultation.refuserConsultation');

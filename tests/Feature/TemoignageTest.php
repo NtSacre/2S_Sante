@@ -146,6 +146,6 @@ return [
 
         $response = $this->deleteJson("api/temoignage/$temoignage->id");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
     }
 }

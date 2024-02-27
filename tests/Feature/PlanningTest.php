@@ -43,16 +43,32 @@ class PlanningTest extends TestCase
 
     protected function createPlanning($medecin)
     {
-  
-return [
+        return [
+            "jour" => "lundi",
+            "creneaux" => json_encode([
+                [
+                    "heure_debut" => "08:01",
+                    "heure_fin" => "09:00"
+                ]
+            ]),
+            'user_id' => $medecin->id,
+            'is_deleted' => false,
+        ];
+    }
 
-    "date"=> "2024-01-01",
-	"heure_debut"=> "14:30",
-	"heure_fin"=> "17:30",
-    'user_id' => $medecin->id,
-    'is_deleted' => false,
-];
-        
+    protected function Planning($medecin)
+    {
+        return [
+            "jour" => "lundi",
+            "creneaux" => [
+                [
+                    "heure_debut" => "08:01",
+                    "heure_fin" => "09:00"
+                ]
+            ],
+            'user_id' => $medecin->id,
+            'is_deleted' => false,
+        ];
     }
 
 
@@ -66,22 +82,24 @@ return [
 
         $response->assertStatus(200)
         ->assertJsonStructure([
+           
             'plannings' => [
-         
-                    '*' => [
-                        "id",
-                        "date" ,
-                        "heure_debut",
-                        "heure_fin",
-                        "status",
-                        "is_deleted",
-                        "user_id",
-                        "created_at",
-                        "updated_at"
+                '*' => [
+                    "id",
+                    "jour",
+                    "status",
+                    "creneaux" => [
+                        '*' => [
+                            "heure_debut",
+                            "heure_fin"
+                        ]
                     ],
-                ],
-                
-            
+                    "is_deleted",
+                    "user_id",
+                    "created_at",
+                    "updated_at"
+                ]
+            ]
         ]);
     }
 
@@ -91,20 +109,24 @@ return [
 
 
 
-        $response = $this->postJson(route('planning.store'), $this->createPlanning($medecin));
+        $response = $this->postJson(route('planning.store'), $this->Planning($medecin));
 
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'message',
                 'planning' => [
-                    "date",
-                    "heure_debut",
-                    "heure_fin",
-                    "user_id",
-                    "updated_at",
-                    "created_at",
-                    "id"
+                    "id",
+                    "jour",
+                    "creneaux" => [
+                        '*' => [
+                            "heure_debut",
+                            "heure_fin"
+                        ]
+                    ],
                     
+                    "user_id",
+                    "created_at",
+                    "updated_at"
                 ],
             ]);
 
@@ -115,33 +137,26 @@ return [
     {
         $medecin = $this->authenticateMedecin('780000111');
 
-        $planning = Planning::factory()->create( $this->createPlanning($medecin));
+        $planning = Planning::factory()->create($this->createPlanning($medecin));
 
         $response = $this->getJson(route('planning.show', $planning->id));
 
         $response->assertStatus(200)
-            ->assertJsonStructure([
-                'planning' => [
-                    "id",
-                    "date",
-                    "heure_debut",
-                    "heure_fin",
-                    "medecin"=> [
-                        "id",
-                        "nom",
-                        "email",
-                        "telephone",
-                        "image",
-                        "genre",
-                        "ville",
-                        "hopital",
-                        "role",
-                        "secteur_activite",
-                    ],
-                    "created_at"
-                    
+        ->assertJsonStructure([
+            
+            'planning' => [
+                "id",
+                "jour",
+                "creneaux" => [
+                    '*' => [
+                        "heure_debut",
+                        "heure_fin"
+                    ]
                 ],
-            ]);
+                "medecin",
+                "created_at",
+            ],
+        ]);
     }
 
     public function testUpdatePlanning()
@@ -152,24 +167,28 @@ return [
 
 
 
-        $response = $this->postJson(route('planning.update', $planning->id), $this->createPlanning($medecin));
+        $response = $this->postJson(route('planning.update', $planning->id), $this->Planning($medecin));
 
         $response->assertStatus(200)
-            ->assertJsonStructure([
-                'message',
-                'planning' => [
-                    "id",
-                    "date",
-                    "heure_debut",
-                    "heure_fin",
-                    "status",
-                    "is_deleted",
-                    "user_id",
-                    "created_at",
-                    "updated_at"
-                    
-                ],
-            ]);
+            
+                ->assertJsonStructure([
+                    'message',
+                    'planning' => [
+                        "id",
+                        "jour",
+                        "status",
+                        "creneaux" => [
+                            '*' => [
+                                "heure_debut",
+                                "heure_fin"
+                            ]
+                        ],
+                        "is_deleted",
+                        "user_id",
+                        "created_at",
+                        "updated_at"
+                    ],
+                ]);
 
     }
 

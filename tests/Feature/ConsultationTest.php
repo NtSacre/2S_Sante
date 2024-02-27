@@ -48,10 +48,13 @@ class ConsultationTest extends TestCase
     {
   
 return [
-
-    "date"=> "2024-01-02",
-	"heure_debut"=> "14:30:00",
-	"heure_fin"=> "17:30:00",
+    "jour" => "lundi",
+    "creneaux" => json_encode([
+        [
+            "heure_debut" => "08:01",
+            "heure_fin" => "19:00"
+        ]
+    ]),
     'user_id' => $medecin->id,
     'is_deleted' => false,
 ];
@@ -74,8 +77,9 @@ return [
     public function testAccepterConsultation()
     {
         $consultation = Consultation::factory()->create([
+            "date"=> "2024-03-04",
             "planning_id"=>2,
-            "heure"=> "13:20:00",
+            "heure"=> "13:20",
             "motif" => "Consultation_generale",
             "type"=>'en_ligne',
             "user_id" => 2,
@@ -109,23 +113,26 @@ return [
     $this->actingAs($user);
 
         $data = [
+            "date"=> "2024-03-11",
             "planning_id"=>3,
-            "heure"=> "13:20",
+            "heure"=> "08:30",
             "motif" => "Consultation_generale",
             "type"=>'en_ligne',
 
         ];
 
         $response = $this->postJson(route('consultation.store'), $data);
-
+       
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'message',
                 'consultation'=>[
+                    "date",
                     "planning_id",
                     "heure",
                     "motif",
                     "user_id",
+                    "rappel_at",
                     "updated_at",
                     "created_at",
                     "id"

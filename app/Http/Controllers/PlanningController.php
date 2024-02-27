@@ -25,7 +25,7 @@ class PlanningController extends Controller
             ], 200);
         }
             return response()->json([
-                'plannings' => $planning
+                'plannings' =>  PlanningResource::collection($planning)
             ], 200);
         
     }
@@ -61,7 +61,7 @@ class PlanningController extends Controller
             if ($planning->save()) {
                 return response()->json([
                     "message" => "Le planning a été enregistré avec succès",
-                    "planning" => $planning
+                    "planning" => new PlanningResource($planning)
                 ], 201);
             } else {
                 return response()->json([
@@ -128,7 +128,7 @@ class PlanningController extends Controller
                 return response()->json([
                     "message" => "Planning a été modifié avec succès",
                     
-                    "planning" => $planning
+                    "planning" => new PlanningResource($planning)
                 ], 200);
             }
            } catch (\Throwable $th) {
