@@ -14,6 +14,7 @@ use App\Http\Resources\VilleResource;
 use App\Http\Resources\ArticleResource;
 use App\Http\Resources\HopitalResource;
 use App\Http\Resources\MedecinResource;
+use App\Http\Resources\PlanningResource;
 use App\Http\Resources\SecteurActiviteResource;
 
 class HomeController extends Controller
@@ -108,7 +109,7 @@ class HomeController extends Controller
     
     
     
-        return response()->json(['plannings' => $plannings]);
+        return response()->json(['plannings' => PlanningResource::collection($plannings)]);
     
         } catch (\Throwable $th) {
             return response()->json([
@@ -150,7 +151,7 @@ public function DetailPlanning(Planning $planning)
     }
      
         return response()->json([
-            'planning' => $planning
+            'planning' => new PlanningResource($planning)
         ], 200);
     
 }

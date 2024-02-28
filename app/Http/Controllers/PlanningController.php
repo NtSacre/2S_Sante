@@ -17,7 +17,9 @@ class PlanningController extends Controller
     public function index()
     {
         $planning = Planning::where('user_id', Auth::user()->id)
-        ->where('is_deleted', false)->get();
+        ->where('is_deleted', false)
+        ->where('status', 'disponible')
+        ->get();
 
         if($planning->all() == null){
             return response()->json([
@@ -53,10 +55,14 @@ class PlanningController extends Controller
             }
         
             // Création d'un nouveau planning
-            $planning = new Planning();
-            $planning->user_id = Auth::user()->id;
-            $planning->jour = $donneePlanningValide['jour'];
-            $planning->creneaux = json_encode($donneePlanningValide['creneaux']);
+            $tableauPlanning = [
+"user_id" =>Auth::user()->id,
+"jour" =>$donneePlanningValide['jour'],
+"creneaux" =>json_encode($donneePlanningValide['creneaux']),
+"status" =>"disponible"
+            ];
+            $planning = new Planning($tableauPlanning );
+
         
             if ($planning->save()) {
                 return response()->json([
@@ -130,6 +136,80 @@ class PlanningController extends Controller
                     
                     "planning" => new PlanningResource($planning)
                 ], 200);
+            }
+           } catch (\Throwable $th) {
+            return response()->json([
+                
+                "erreur" => $th->getMessage(),
+            ], 500);
+           }
+    }
+
+
+    public function updateStatusPlanningPasDisponible(Planning $planning)
+    {
+        try {
+            $this->authorize('update', $planning);
+            if ($planning->is_deleted ) {
+                return response()->json([ "error" => 'Ressource non trouvée'
+            ], 404);
+            }
+ 
+            
+           
+            
+    
+            if ($planning->status != 'pas_disponible') {
+                $planning->status = 'pas_disponible';
+                $planning->update();
+                return response()->json([
+                    "message" => "Planning a été modifié avec succès",
+                    
+                    "planning" => new PlanningResource($planning)
+                ], 200);
+            }else{
+                return response()->json([
+                    "error" => "Planning déjà modifié à pas disponible",
+                    
+                   
+                ], 409);
+            }
+           } catch (\Throwable $th) {
+            return response()->json([
+                
+                "erreur" => $th->getMessage(),
+            ], 500);
+           }
+    }
+
+
+    public function updateStatusPlanningDisponible(Planning $planning)
+    {
+        try {
+            $this->authorize('update', $planning);
+            if ($planning->is_deleted ) {
+                return response()->json([ "error" => 'Ressource non trouvée'
+            ], 404);
+            }
+ 
+            
+           
+            
+    
+            if ($planning->status != 'disponible') {
+                $planning->status = 'disponible';
+                $planning->update();
+                return response()->json([
+                    "message" => "Planning a été modifié avec succès",
+                    
+                    "planning" => new PlanningResource($planning)
+                ], 200);
+            }else{
+                return response()->json([
+                    "error" => "Planning déjà modifié à pas disponible",
+                    
+                   
+                ], 409);
             }
            } catch (\Throwable $th) {
             return response()->json([

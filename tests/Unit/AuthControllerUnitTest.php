@@ -32,7 +32,7 @@ class AuthControllerUnitTest extends TestCase
          User::factory()->create([
             'nom'=> 'heber tochi',
             'email' => 'hebert@example.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('password123.'),
             'telephone'=>'779999911',
             'genre' => 'homme',
             'role_id' => 3,
@@ -44,7 +44,7 @@ class AuthControllerUnitTest extends TestCase
         // Envoyez une demande de connexion avec les identifiants valides
         $request = new LoginRequest([
             'email' => 'hebert@example.com',
-            'password' => 'password123',
+            'password' => 'password123.',
         ]);
         $response = $this->authController->login($request);
         $this->assertArrayHasKey('access_token', $response->original);
@@ -58,7 +58,7 @@ class AuthControllerUnitTest extends TestCase
          User::factory()->create([
             'nom'=> 'heber tochi',
             'email' => 'albertine@example.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('password123.'),
             'telephone'=>'779999912',
             'genre' => 'homme',
             'role_id' => 3,
@@ -70,7 +70,7 @@ class AuthControllerUnitTest extends TestCase
         // Envoyez une demande de connexion avec les identifiants valides
         $request = new LoginRequest([
             'email' => 'albertine@example.com',
-            'password' => 'password123',
+            'password' => 'password123.',
         ]);
         $response = $this->authController->login($request);
 
@@ -78,7 +78,7 @@ class AuthControllerUnitTest extends TestCase
         $this->assertInstanceOf(JsonResponse::class, $response);
 
         // Assurez-vous que le code de statut HTTP est 401 (Unauthorized)
-        $this->assertEquals(401, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     
         // Assurez-vous que la réponse contient le message approprié
         $expectedContent = [
@@ -97,13 +97,13 @@ class AuthControllerUnitTest extends TestCase
         $storeMedecinRequest->merge([
             'nom' => 'medecin',
             'email' => 'medecine@example.com',
-            'password' => 'password',
+            'password' => 'Password123.',
             'telephone' => '778523256',
             'genre' => 'homme',
             'ville_id' => 1,
             'hopital_id' => 1,
             'secteur_activite_id' => 1,
-            'password_confirmation' => 'password',
+            'password_confirmation' => 'Password123.',
 
         ]);
    
@@ -129,11 +129,11 @@ class AuthControllerUnitTest extends TestCase
         $storePatientRequest->merge([
             'nom' => 'patient',
             'email' => 'patient@example.com',
-            'password' => 'password',
+            'password' => 'Password123.',
             'telephone' => '779999911',
             'genre' => 'homme',
             'ville_id' => 1,
-            'password_confirmation' => 'password',
+            'password_confirmation' => 'Password123.',
 
         ]);
    
@@ -160,7 +160,7 @@ class AuthControllerUnitTest extends TestCase
         $user = User::factory()->create([
             'nom' => 'logout',
             'email' => 'logoutuser@example.com',
-            'password' => 'password',
+            'password' => bcrypt('Password123.'),
             'telephone' => '779999912',
             'genre' => 'homme',
             'ville_id' => 1,

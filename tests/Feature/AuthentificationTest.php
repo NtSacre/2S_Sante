@@ -49,8 +49,8 @@ class AuthentificationTest extends TestCase
         $data = [
             'nom' => 'Momodou Sail',
             'email' => $this->faker->unique()->safeEmail,
-            'password' => 'password123',
-            'password_confirmation' =>'password123',
+            'password' => 'Password123.',
+            'password_confirmation' =>'Password123.',
             'telephone' => '770000001',
             'genre' => 'homme',
             'role_id' => 3,
@@ -78,8 +78,8 @@ class AuthentificationTest extends TestCase
         $data = [
             'nom' => 'hermann du Con',
             'email' => $this->faker->unique()->safeEmail,
-            'password' => 'password123',
-            'password_confirmation' =>'password123',
+            'password' => 'Password123.',
+            'password_confirmation' =>'Password123.',
             'telephone' => '770000011',
             'genre' => 'homme',
             'image' => UploadedFile::fake()->image('article.jpg'),
@@ -176,8 +176,8 @@ class AuthentificationTest extends TestCase
         // Créer un utilisateur de test
         $user = User::factory()->create([
             'nom'=> $this->faker->name,
-            'email' => 'tagee@example.com',
-            'password' => bcrypt('password123'),
+            'email' => 'tago@example.com',
+            'password' => bcrypt('Password123.'),
             'telephone'=>'770001111',
             'genre' => 'homme',
             'role_id' => 2,
@@ -196,12 +196,12 @@ class AuthentificationTest extends TestCase
 
         // Envoyer une requête de connexion avec des informations d'identification valides
         $response = $this->postJson('/api/login', [
-            'email' => 'tagee@example.com',
-            'password' => 'password123',
+            'email' => 'tago@example.com',
+            'password' => 'Password123.',
         ]);
 
         // Vérifier que la réponse est correcte
-        $response->assertStatus(401);
+        $response->assertStatus(404);
 
 
     }

@@ -50,6 +50,11 @@ Route::middleware('medecin')->group(function(){
     Route::post('/update-planning/{planning}', [PlanningController::class, 'update'])->name('planning.update');
     Route::delete('/planning/{planning}', [PlanningController::class, 'destroy'])->name('planning.destroy');
     Route::get('/planning/{planning}', [PlanningController::class, 'show'])->name('planning.show');
+    Route::get('/planning-indisponible/{planning}', [PlanningController::class, 'updateStatusPlanningPasDisponible'])
+    ->name('planning.updateStatusPlanningPasDisponible');
+
+    Route::get('/planning-disponible/{planning}', [PlanningController::class, 'updateStatusPlanningDisponible'])
+    ->name('planning.updateStatusPlanningDisponible');
     Route::get('/planning', [PlanningController::class, 'index'])->name('planning.index');
 // route pour la consultation medecin
     Route::get('/liste-consultation', [ConsultationController::class, 'index'])->name('consultation.index');
@@ -107,6 +112,8 @@ Route::prefix('/home')->name('home.')->group(function(){
     Route::get('/voir-article/{article}', [HomeController::class, 'voirArticle'])->name('voirArticle');
     Route::get('/planning-medecin/{medecin}', [HomeController::class, 'planningMedecin'])->name('planningMedecin');
     Route::get('detail-medecin', [HomeController::class, 'detailMedecin'])->name('detailMedecin');
+    Route::get('detail-planning/{planning}', [HomeController::class, 'DetailPlanning'])->name('DetailPlanning');
+
     Route::get('/user-temoignages', [HomeController::class, 'toutTemoignage'])->name('toutTemoignage');
 
 

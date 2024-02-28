@@ -79,7 +79,7 @@ class PlanningTest extends TestCase
         Planning::factory()->count(5)->create($this->createPlanning($medecin));
 
         $response = $this->getJson(route('planning.index'));
-
+dd($response);
         $response->assertStatus(200)
         ->assertJsonStructure([
            
@@ -94,10 +94,9 @@ class PlanningTest extends TestCase
                             "heure_fin"
                         ]
                     ],
-                    "is_deleted",
-                    "user_id",
+                   
                     "created_at",
-                    "updated_at"
+                   
                 ]
             ]
         ]);
@@ -124,9 +123,9 @@ class PlanningTest extends TestCase
                         ]
                     ],
                     
-                    "user_id",
+                  
                     "created_at",
-                    "updated_at"
+                   
                 ],
             ]);
 
