@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->string('titre');
-            $table->string('description');
+            $table->longText('description');
             $table->string('image');
             $table->boolean('is_deleted')->default(false);
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
