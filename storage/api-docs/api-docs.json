@@ -1342,6 +1342,119 @@
                 ]
             }
         },
+
+        "/api/planning-indisponible/{planning}": {
+            "get": {
+                "summary": "Modifier status planning à indisponible",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion Planning"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "planning",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },  
+        "/api/planning-disponible/{planning}": {
+            "get": {
+                "summary": "Modifier status planning à disponible",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Gestion Planning"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "planning",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        }, 
+          
+        
         "/api/update-planning/{planning}": {
             "post": {
                 "summary": "Modifier  planning",
